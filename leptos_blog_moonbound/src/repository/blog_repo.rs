@@ -59,16 +59,10 @@ pub async fn upsert_post(
 pub async fn get_post(id: String) -> Result<Post, ServerFnError> {
     //
     log!("[get_post] Serving for id {id}");
-    sleep(Duration::from_secs(2));
+    // FYI: Temporarily used for testing the Suspense feature in EditPost component.
+    sleep(Duration::from_secs(3));
 
     let mut db_conn = self::ssr::db_conn().await?;
-    // let res: Post = sqlx::query_as("SELECT * FROM post WHERE id = ?")
-    //     .bind(id)
-    //     .fetch_one(&mut db_conn)
-    //     .await
-    //     .map_err(|_| ServerFnError::ServerError("error getting post".to_string()))?;
-
-    // Ok(res)
 
     match sqlx::query_as::<_, Post>("SELECT * FROM post WHERE id = ?")
         .bind(&id)
@@ -84,6 +78,24 @@ pub async fn get_post(id: String) -> Result<Post, ServerFnError> {
         }
         Err(e) => {
             log!("[get_post] Error {}", e.to_string());
+            Err(ServerFnError::ServerError(e.to_string()))
+        }
+    }
+}
+
+#[server(DeletePost, "/api")]
+pub async fn delete_post(id: String) -> Result<(), ServerFnError> {
+    log!("[delete_post] Deleting by id {:?} ...", &id);
+    let mut db_conn = self::ssr::db_conn().await?;
+
+    match sqlx::query("DELETE FROM post WHERE ID = ?")
+        .bind(id)
+        .execute(&mut db_conn)
+        .await
+    {
+        Ok(_) => Ok(()),
+        Err(e) => {
+            log!("[delete_post] Error {}", e.to_string());
             Err(ServerFnError::ServerError(e.to_string()))
         }
     }
