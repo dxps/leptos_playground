@@ -32,7 +32,7 @@ pub fn App() -> impl IntoView {
         <Stylesheet id="leptos" href="/pkg/leptos_blog_moonbound.css"/>
 
         // sets the document title
-        <Title text="Leptos Xp"/>
+        <Title text="Leptos Blog Moonbound"/>
 
         <Navbar/>
 

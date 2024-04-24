@@ -30,10 +30,6 @@ pub fn EditPost() -> impl IntoView {
         },
     );
 
-    // let res: Option<Result<Post, ServerFnError>> = post_resource.get();
-
-    let (post, set_post) = create_signal(Post::new_empty());
-
     view! {
         <Suspense fallback = move || view! { <p>"Loading ..."</p> }>
             <ErrorBoundary fallback = move |_| view! { <p>"Error!"</p> }>
@@ -48,8 +44,7 @@ pub fn EditPost() -> impl IntoView {
                                             if let Some(Ok(post)) = curr {
                                                 post.title = event_target_value(&ev)
                                             }
-                                        }
-                                        )
+                                        })
                                     }
                                     prop:value={ move || post_resource.get().and_then(|res| res.map(|post| post.title).ok())}
                                 />
@@ -67,6 +62,9 @@ pub fn EditPost() -> impl IntoView {
                                     prop:value={ move || post_resource.get().and_then(|res| res.map(|post| post.content).ok())}
                                 />
                             </label>
+                            <div class="flex justify-center pb-4">
+                                <input type="submit" value="Submit" class="mx-auto w-1/3 bg-blue-500 hover:bg-blue-700 text-white"/>
+                            </div>
                         </form>
                     </div>
                     // The right side preview.
