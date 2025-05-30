@@ -1,0 +1,3 @@
+# User Directory - An example using Leptos, Axum, and Postgres
+
+A first tryout generated using ChatGPT, but not yet working ...

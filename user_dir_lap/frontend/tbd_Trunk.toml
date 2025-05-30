@@ -1,0 +1,6 @@
+[build]
+target = "wasm32-unknown-unknown"
+
+[serve]
+proxy_backend = "http://localhost:3000"
+proxy_ws = true
