@@ -1,6 +1,6 @@
 #![allow(non_snake_case)]
 
-use leptos::{logging::log, prelude::*, reactive::spawn_local, server, server_fn::codec::PutUrl};
+use leptos::{logging::log, prelude::*, reactive::spawn_local, server};
 use leptos_meta::{provide_meta_context, MetaTags, Stylesheet, Title};
 use leptos_router::{
     components::{Route, Router, Routes},
