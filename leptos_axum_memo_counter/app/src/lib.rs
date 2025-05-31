@@ -1,4 +1,6 @@
-use leptos::{logging::log, prelude::*, reactive::spawn_local, server};
+#![allow(non_snake_case)]
+
+use leptos::{logging::log, prelude::*, reactive::spawn_local, server, server_fn::codec::PutUrl};
 use leptos_meta::{provide_meta_context, MetaTags, Stylesheet, Title};
 use leptos_router::{
     components::{Route, Router, Routes},
@@ -49,7 +51,9 @@ fn HomePage() -> impl IntoView {
 
     let on_server = move |_| {
         spawn_local(async move {
-            server_increment(count.get_untracked()).await.unwrap();
+            if let Err(err) = set_server_increment(count.get_untracked()).await {
+                log!("Got error from server when setting the couter: {}", err);
+            };
         });
     };
 
@@ -62,8 +66,9 @@ fn HomePage() -> impl IntoView {
     }
 }
 
-#[server]
-pub async fn server_increment(counter: i32) -> Result<String, ServerFnError> {
-    println!("[increment] Server fn called with counter: {}", counter);
+#[server(CounterUpdate, endpoint = "/counter/set")]
+pub async fn set_server_increment(counter: i32) -> Result<String, ServerFnError> {
+    println!("[set_server_increment] counter: {}", counter);
+
     Ok("Ack".into())
 }

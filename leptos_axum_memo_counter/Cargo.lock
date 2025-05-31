@@ -2047,6 +2047,7 @@ dependencies = [
  "leptos",
  "leptos_axum",
  "log",
+ "once_cell",
  "simple_logger",
  "tokio",
  "tower",
