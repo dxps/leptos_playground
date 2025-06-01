@@ -5,7 +5,7 @@
 			// "component",
 			"server"
 		]
-	}
+	},
 	// For code that is cfg-gated for 'csr' or 'ssr' feature.
-	// "rust-analyzer.cargo.features": ["csr", "ssr"]
+	"rust-analyzer.cargo.features": ["csr", "ssr"]
 }
