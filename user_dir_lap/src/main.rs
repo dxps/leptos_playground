@@ -11,7 +11,7 @@ mod ssr_imports {
     };
     pub use leptos::prelude::*;
     pub use leptos_axum::{LeptosRoutes, generate_route_list};
-    pub use user_dir_lap::{fallback::file_or_index_handler, todo::*, *};
+    pub use user_dir_lap::{fallback::file_or_index_handler, todo_server_fns::*, *};
 }
 
 #[cfg(feature = "ssr")]

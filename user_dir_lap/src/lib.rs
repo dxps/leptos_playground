@@ -1,6 +1,6 @@
 pub mod components;
 pub mod errors;
-pub mod todo;
+pub mod todo_server_fns;
 
 #[cfg(feature = "ssr")]
 pub mod fallback;
