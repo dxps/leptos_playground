@@ -5,5 +5,3 @@
 
 /node_modules
 
-## The sqlite db file.
-/iam.db
