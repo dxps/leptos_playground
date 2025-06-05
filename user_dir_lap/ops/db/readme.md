@@ -5,7 +5,7 @@
 Install `sqlx-cli` version 0.7 using:
 
 ```
-cargo install --version=0.7.4 sqlx-cli --no-default-features --features native-tls,postgres
+cargo install --version=0.8.6 sqlx-cli --no-default-features --features native-tls,postgres
 ```
 
 On an Ubuntu based Linux distro, you need to have `libssl-dev` package installed,

@@ -11,15 +11,20 @@ mod ssr_imports {
     };
     pub use leptos::prelude::*;
     pub use leptos_axum::{LeptosRoutes, generate_route_list};
-    pub use user_dir_lap::{fallback::file_or_index_handler, todo_server_fns::*, *};
+    pub use user_dir_lap::{fallback::file_or_index_handler, server_fns_todo::*, *};
 }
 
 #[cfg(feature = "ssr")]
 #[cfg_attr(feature = "ssr", tokio::main)]
 async fn main() {
     use ssr_imports::*;
+    use user_dir_lap::server_logging::init_logging;
 
-    let _conn = ssr::db().await.expect("couldn't connect to DB");
+    init_logging();
+
+    dotenvy::dotenv().unwrap();
+
+    let _conn = ssr::db_pool_init().await.expect("couldn't connect to DB");
 
     // Setting this to None means we'll be using cargo-leptos and its env vars
     let conf = get_configuration(None).unwrap();
