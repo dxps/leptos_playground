@@ -1,18 +1,10 @@
 pub mod components;
+pub mod domain;
 pub mod errors;
 pub mod server_fns_todo;
 
 #[cfg(feature = "ssr")]
-pub mod server_logging;
-
-#[cfg(feature = "ssr")]
-pub mod fallback;
-
-#[cfg(feature = "ssr")]
-pub mod ssr;
-
-#[cfg(feature = "ssr")]
-pub mod server_state;
+pub mod server;
 
 #[cfg_attr(feature = "csr", wasm_bindgen::prelude::wasm_bindgen)]
 pub fn hydrate() {

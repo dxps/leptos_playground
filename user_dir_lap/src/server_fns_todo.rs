@@ -18,9 +18,9 @@ pub async fn get_todos() -> Result<Vec<Todo>, ServerFnError> {
     // this is just an example of how to access server context injected in the handlers
     let req_parts = use_context::<Parts>();
 
-    if let Some(req_parts) = req_parts {
-        println!("Uri = {:?}", req_parts.uri);
-    }
+    // if let Some(req_parts) = req_parts {
+    //     println!("Uri = {:?}", req_parts.uri);
+    // }
 
     // use futures::TryStreamExt;
     // let mut conn = db_pool_init().await?;

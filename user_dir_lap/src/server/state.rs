@@ -1,3 +1,4 @@
+use std::fmt::Display;
 #[cfg(feature = "ssr")]
 use std::sync::Arc;
 
@@ -23,6 +24,12 @@ impl ServerState {
     }
 }
 
+impl Display for ServerState {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "ServerState{:?}", self.db_pool)
+    }
+}
+
 #[cfg(feature = "ssr")]
 impl<S> FromRequestParts<S> for ServerState
 where
@@ -32,6 +39,8 @@ where
     type Rejection = (StatusCode, String);
 
     async fn from_request_parts(_parts: &mut Parts, state: &S) -> Result<Self, Self::Rejection> {
-        Ok(Self::from_ref(state))
+        let state = Self::from_ref(state);
+        log::debug!("[from_request_parts] server state: {state}");
+        Ok(state)
     }
 }

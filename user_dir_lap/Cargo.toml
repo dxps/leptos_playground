@@ -1,14 +1,23 @@
+#########
 [package]
+#########
+
 name = "user_dir_lap"
 description = "A user directory implementation using Laptos, Axum, and PostgreSQL"
 authors = [ "Marius Ileana <dev@devisions.org>" ]
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 
+#####
 [lib]
+#####
+
 crate-type = ["cdylib", "rlib"]
 
+##############
 [dependencies]
+##############
+
 console_error_panic_hook = "0.1.7"
 futures = "0.3.31"
 leptos = { version="=0.8.2", features = ["csr", "nightly"] }
@@ -27,6 +36,12 @@ sqlx = { version = "0.8.6", features = [
     "postgres",
     "runtime-tokio-rustls",
 ], optional = true }
+
+axum_session = { version = "0.16.0", optional = true }
+axum_session_auth = { version = "0.16.0", optional = true }
+axum_session_sqlx = { version = "0.5.0", features = ["postgres", "tls-rustls"], optional = true }
+async-trait = { version = "0.1.88", optional = true }
+
 thiserror = "2.0.12"
 anyhow = { version="1.0.98" }
 log = { version="0.4.27", optional = true }
@@ -34,9 +49,14 @@ simple_logger = { version = "5.0.0", optional = true }
 console_log = { version = "1.0.0", optional = true }
 wasm-bindgen = "0.2.100"
 dotenvy = { version = "0.15.7", optional = true }
+randoid = { version = "0.3.0", optional = true }
 
+##########
 [features]
+##########
+
 csr = ["leptos/csr"]
+
 ssr = [
   "dep:axum",
   "dep:tower",
@@ -52,13 +72,21 @@ ssr = [
   "dep:leptos_integration_utils",
   "dotenvy",
   "console_log", "simple_logger",
+  "axum_session", "axum_session_auth", "axum_session_sqlx", "async-trait",
+  "randoid",
 ]
 
+#####################################
 [package.metadata.cargo-all-features]
+#####################################
+
 denylist = ["axum", "tower", "tower-http", "tokio", "sqlx", "leptos_axum"]
 skip_feature_sets = [["csr", "ssr"], ["csr", "hydrate"], ["ssr", "hydrate"], []]
 
+#########################
 [package.metadata.leptos]
+#########################
+
 # The name used by wasm-bindgen/cargo-leptos for the JS/WASM bundle. Defaults to the crate name
 output-name = "user_dir_lap"
 # The site root folder is where cargo-leptos generate all output. WARNING: all content of this folder will be erased on a rebuild. Use it in your server setup.
