@@ -13,10 +13,10 @@ pub struct Todo {
 #[server]
 pub async fn get_todos() -> Result<Vec<Todo>, ServerFnError> {
     // use crate::ssr::db_pool_init;
-    use http::request::Parts;
+    // use http::request::Parts;
 
     // this is just an example of how to access server context injected in the handlers
-    let req_parts = use_context::<Parts>();
+    // let req_parts = use_context::<Parts>();
 
     // if let Some(req_parts) = req_parts {
     //     println!("Uri = {:?}", req_parts.uri);
@@ -48,6 +48,8 @@ pub async fn add_todo(title: String) -> Result<(), ServerFnError> {
     // fake API delay
     std::thread::sleep(std::time::Duration::from_millis(250));
 
+    let _ = title;
+
     // match sqlx::query("INSERT INTO todos (title, completed) VALUES ($1, false)")
     // .bind(title)
     // .execute(&mut conn)
@@ -63,6 +65,8 @@ pub async fn add_todo(title: String) -> Result<(), ServerFnError> {
 pub async fn delete_todo(id: u16) -> Result<(), ServerFnError> {
     // use crate::ssr::db_pool_init;
     // let mut conn = db_pool_init().await?;
+
+    let _ = id;
 
     // Ok(sqlx::query("DELETE FROM todos WHERE id = $1")
     // .bind(id)

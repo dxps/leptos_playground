@@ -4,8 +4,7 @@ pub use auth::*;
 mod fallback;
 pub use fallback::*;
 
-mod fns;
-pub use fns::*;
+pub mod fns;
 
 mod logging;
 pub use logging::*;
@@ -13,8 +12,7 @@ pub use logging::*;
 mod logic;
 pub use logic::*;
 
-mod model;
-pub use model::*;
+pub mod model;
 
 mod ssr;
 pub use ssr::*;
