@@ -34,9 +34,11 @@ async fn main() {
     init_logging();
     dotenvy::dotenv().unwrap();
 
+    log::info!("Connecting to database ...");
     let dbcp = server::db_pool_init()
         .await
-        .expect("Failed to connect to DB");
+        .expect("Failed to connect to the database!");
+    log::info!("Connected to database.");
     let session_config = SessionConfig::default().with_table_name("user_sessions");
     let session_store = SessionPgSessionStore::new(Some(dbcp.clone().into()), session_config)
         .await
@@ -45,7 +47,7 @@ async fn main() {
 
     let state = ServerState::new(Arc::new(dbcp.clone()));
 
-    // Setting this to None means we'll be using cargo-leptos and its env vars
+    // Setting this to None means we'll be using cargo-leptos and its env vars.
     let conf = get_configuration(None).unwrap();
     let leptos_options = conf.leptos_options;
     let addr = leptos_options.site_addr;

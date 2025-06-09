@@ -2,6 +2,7 @@ pub mod components;
 pub mod domain;
 pub mod errors;
 pub mod server_fns_todo;
+pub mod views;
 
 #[cfg(feature = "ssr")]
 pub mod server;
