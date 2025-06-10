@@ -7,7 +7,7 @@ pub fn Navbar() -> impl IntoView {
     view! {
         <nav class="absolute w-full px-4 py-1 flex justify-between items-center bg-white z-40">
         <a href="/" class="py-1.5 hover:bg-white">
-            <img src="/assets/img/favicon/favicon-32x32.png" class="w-[26px] h-[26px] -mt-1"/>
+            <img src="/img/favicon/favicon-32x32.png" class="w-[24px] h-[24px]"/>
         </a>
         <ul
             class="hidden absolute top-1/2 sm:left-1/3 sm:pl-16 md:left-1/2 lg:left-1/2

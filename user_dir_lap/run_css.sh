@@ -6,5 +6,5 @@
 ## npm install tailwindcss@4.1.8 @tailwindcss/cli@4.1.8
 ## ------------------------------------------------------
 
-npx tailwindcss -i ./style.css -o ./public/main.css --watch
+npx tailwindcss -i ./style.css -o ./assets/css/main.css --watch
 

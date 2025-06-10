@@ -27,8 +27,8 @@ pub async fn file_or_index_handler(uri: Uri, State(options): State<LeptosOptions
                         <meta name="viewport" content="width=device-width, initial-scale=1"/>
                         <AutoReload options=options.clone() />
                         <HydrationScripts options=options.clone()/>
-                        <link rel="stylesheet" id="leptos" href="/main.css"/>
-                        <link rel="shortcut icon" type="image/ico" href="/favicon.ico"/>
+                        <link rel="stylesheet" id="leptos" href="/css/main.css"/>
+                        <link rel="shortcut icon" type="image/ico" href="/img/favicon/favicon.ico"/>
                     </head>
                     <body></body>
                 </html>
