@@ -17,13 +17,16 @@ mod ssr_imports {
 #[cfg(feature = "ssr")]
 #[cfg_attr(feature = "ssr", tokio::main)]
 async fn main() {
+    use std::sync::Arc;
+
     use axum::Extension;
+    // use axum::Extension;
     use axum_session::{SessionConfig, SessionLayer};
     use axum_session_auth::{AuthConfig, AuthSessionLayer};
     use axum_session_sqlx::{SessionPgPool, SessionPgSessionStore};
     use sqlx::PgPool;
     use ssr_imports::*;
-    use std::sync::Arc;
+    // use std::sync::Arc;
     use user_dir_lap::{
         domain::model::{Id, UserAccount},
         server::{ServerState, init_logging},
@@ -62,7 +65,8 @@ async fn main() {
             AuthSessionLayer::<UserAccount, Id, SessionPgPool, PgPool>::new(Some(dbcp))
                 .with_config(auth_config),
         )
-        .layer(SessionLayer::new(session_store));
+        .layer(SessionLayer::new(session_store))
+        .layer(Extension(state));
 
     log::info!("Listening on http://{}", &addr);
     let listener = tokio::net::TcpListener::bind(&addr)

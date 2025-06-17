@@ -49,10 +49,14 @@ pub fn Login() -> impl IntoView {
 #[server]
 pub async fn login(username: String, password: String) -> Result<String, ServerFnError> {
     //
-    use crate::server::AuthSession;
+    use crate::server::Session;
 
     log::info!("login username: '{}', password: '{}'", username, password);
-    let sess: AuthSession = leptos_axum::extract().await?;
-    log::info!("state: '{:#?}'", sess);
+    let sess: Session = leptos_axum::extract().await?;
+    log::info!("sess: '{:#?}'", sess);
+
+    let login_res = sess.user_mgmt.authenticate_user(username, password).await?;
+    log::info!("login_res: '{:#?}'", login_res);
+
     Ok("ok".to_string())
 }

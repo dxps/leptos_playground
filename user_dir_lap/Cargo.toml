@@ -50,6 +50,7 @@ console_log = { version = "1.0.0", optional = true }
 wasm-bindgen = "0.2.100"
 dotenvy = { version = "0.15.7", optional = true }
 randoid = { version = "0.3.0", optional = true }
+md5 = { version = "0.7.0", optional = true }
 
 ##########
 [features]
@@ -73,7 +74,7 @@ ssr = [
   "dotenvy",
   "console_log", "simple_logger",
   "axum_session", "axum_session_auth", "axum_session_sqlx", "async-trait",
-  "randoid",
+  "randoid", "md5",
 ]
 
 #####################################

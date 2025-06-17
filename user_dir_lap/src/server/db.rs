@@ -1,4 +1,4 @@
-use crate::errors::AppError;
+use crate::errors::{AppError, AppUseCase};
 use leptos::server_fn::ServerFnError;
 use sqlx::{PgPool, postgres::PgPoolOptions};
 
@@ -18,4 +18,55 @@ pub async fn db_pool_init() -> Result<PgPool, ServerFnError> {
         .map_err(|_| AppError::Err("Failed to connect to database".into()))?;
 
     Ok(pool)
+}
+
+impl From<sqlx::Error> for AppError {
+    //
+    fn from(err: sqlx::Error) -> Self {
+        //
+        let mut app_err = AppError::Ignorable;
+        log::debug!("from(sqlx:Error): err={:?}", err);
+        if err.as_database_error().is_some() {
+            // FYI: For now, any db error is considered as internal error.
+            app_err = AppError::InternalErr
+        }
+        app_err
+    }
+}
+
+impl From<(sqlx::Error, AppUseCase)> for AppError {
+    //
+    fn from(ctx: (sqlx::Error, AppUseCase)) -> Self {
+        //
+        let err = &ctx.0;
+        let uc = &ctx.1;
+        match uc {
+            AppUseCase::UserRegistration => match &err.as_database_error() {
+                Some(e) => match e.code() {
+                    Some(code) => match code.as_ref() {
+                        // 23505 is postgres specific code for duplicate entry (named "unique_violation").
+                        // See: https://www.postgresql.org/docs/16/errcodes-appendix.html.
+                        "23505" => AppError::AlreadyExists("".into()),
+                        _ => log_and_return_internal_err(ctx),
+                    },
+                    None => log_and_return_internal_err(ctx),
+                },
+                None => log_and_return_internal_err(ctx),
+            },
+
+            AppUseCase::UserLogin => match &err {
+                sqlx::Error::RowNotFound => AppError::Unauthorized("wrong credentials".into()),
+                _ => log_and_return_internal_err(ctx),
+            },
+        }
+    }
+}
+
+fn log_and_return_internal_err(ctx: (sqlx::Error, AppUseCase)) -> AppError {
+    log::debug!(
+        "InternalErr due to sql err={:?} on usecase:{:?}.",
+        ctx.0,
+        ctx.1
+    );
+    AppError::InternalErr
 }
