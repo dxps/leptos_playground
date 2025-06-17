@@ -11,7 +11,15 @@ Technical capabilities (showcases):
 
 ## Getting Started
 
-_to-be-documented_
+### Prerequisites
+
+Install the following:
+
+-   [Rust](https://www.rust-lang.org/tools/install)
+-   [Docker](https://www.docker.com/get-docker)
+-   [Tailwind CLI](https://tailwindcss.com/docs/installation/tailwind-cli) using `npm install tailwindcss @tailwindcss/cli`\
+    Version 4.1 is available and used at the time of this writing.
+-   Cargo Leptos plugin using `cargo install --locked cargo-leptos`
 
 <br/>
 
