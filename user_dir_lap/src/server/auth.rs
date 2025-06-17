@@ -1,17 +1,16 @@
 use async_trait::async_trait;
 use axum::response::{IntoResponse, Response};
 use axum_session_auth::*;
+use axum_session_sqlx::SessionPgPool;
 use sqlx::PgPool;
 
 use crate::domain::model::{Id, UserAccount};
 
+pub type AuthSession = axum_session_auth::AuthSession<UserAccount, Id, SessionPgPool, PgPool>;
+
 #[async_trait]
 impl Authentication<UserAccount, Id, PgPool> for UserAccount {
     //
-
-    //async fn load_user(userid: Type, pool: Option<&Pool>) -> Result<User, Error>;
-    //Type: Eq + Default + Clone + Send + Sync + Hash + Serialize + DeserializeOwned + 'static,
-
     async fn load_user(_user_id: Id, pool: Option<&PgPool>) -> Result<UserAccount, anyhow::Error> {
         let _pool = pool.unwrap();
         // UsersRepo::get_by_id(&user_id, pool)

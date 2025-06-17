@@ -12,15 +12,17 @@ use axum::extract::{FromRef, FromRequestParts};
 use http::{StatusCode, request::Parts};
 
 #[cfg(feature = "ssr")]
-#[derive(Clone)]
+#[derive(FromRef, Clone, Debug)]
 pub struct ServerState {
-    pub db_pool: Arc<PgPool>,
+    pub db_pool: Option<Arc<PgPool>>,
 }
 
 impl ServerState {
     pub fn new(db_pool: Arc<PgPool>) -> Self {
         //
-        Self { db_pool }
+        Self {
+            db_pool: Some(db_pool),
+        }
     }
 }
 
@@ -44,3 +46,10 @@ where
         Ok(state)
     }
 }
+
+// #[cfg(feature = "ssr")]
+// impl FromRef<()> for ServerState {
+//     fn from_ref(_input: &()) -> Self {
+//         Self { db_pool: None }
+//     }
+// }
