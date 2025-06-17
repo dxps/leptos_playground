@@ -4,8 +4,8 @@ use leptos_router::{
     path,
 };
 
-use crate::{
-    components::Navbar,
+use crate::ui::{
+    comps::Navbar,
     views::{Home, Login},
 };
 
@@ -13,7 +13,7 @@ use crate::{
 pub fn App() -> impl IntoView {
     view! {
         <Router>
-            <div class="flex flex-col min-h-screen bg-indigo-50">
+            <div class="flex flex-col min-h-screen bg-gray-100">
                 <Navbar/>
                 <div class="flex flex-col min-h-screen justify-center items-center drop-shadow-2xl">
                     <Routes fallback=|| "Not found.">

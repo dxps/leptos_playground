@@ -1,6 +1,6 @@
 use crate::{
-    components::ErrorTemplate,
     server_fns_todo::{AddTodo, DeleteTodo, get_todos},
+    ui::comps::ErrorTemplate,
 };
 use leptos::{either::Either, prelude::*};
 

@@ -1,4 +1,4 @@
-/*! tailwindcss v4.1.8 | MIT License | https://tailwindcss.com */
+/*! tailwindcss v4.1.10 | MIT License | https://tailwindcss.com */
 @layer properties;
 @layer theme, base, components, utilities;
 @layer theme {
@@ -7,7 +7,9 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-blue-50: oklch(97% 0.014 254.604);
     --color-indigo-50: oklch(96.2% 0.018 272.314);
+    --color-gray-50: oklch(98.5% 0.002 247.839);
     --color-gray-100: oklch(96.7% 0.003 264.542);
     --color-gray-600: oklch(44.6% 0.03 256.802);
     --color-white: #fff;
@@ -201,9 +203,6 @@
       max-width: 96rem;
     }
   }
-  .-mt-1 {
-    margin-top: calc(var(--spacing) * -1);
-  }
   .flex {
     display: flex;
   }
@@ -216,17 +215,11 @@
   .h-\[24px\] {
     height: 24px;
   }
-  .h-\[26px\] {
-    height: 26px;
-  }
   .min-h-screen {
     min-height: 100vh;
   }
   .w-\[24px\] {
     width: 24px;
-  }
-  .w-\[26px\] {
-    width: 26px;
   }
   .w-full {
     width: 100%;
@@ -274,6 +267,15 @@
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;
+  }
+  .bg-blue-50 {
+    background-color: var(--color-blue-50);
+  }
+  .bg-gray-50 {
+    background-color: var(--color-gray-50);
+  }
+  .bg-gray-100 {
+    background-color: var(--color-gray-100);
   }
   .bg-indigo-50 {
     background-color: var(--color-indigo-50);

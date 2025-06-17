@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-use crate::components::NavUserMenu;
+use crate::ui::comps::NavUserMenu;
 
 #[component]
 pub fn Navbar() -> impl IntoView {
