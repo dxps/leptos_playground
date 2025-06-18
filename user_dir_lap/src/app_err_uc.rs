@@ -1,10 +1,16 @@
 use http::status::StatusCode;
+use leptos::prelude::ServerFnError;
+use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 use thiserror::Error;
 
 pub type AppResult<T> = std::result::Result<T, AppError>;
 
-#[derive(Debug, Error)]
+// ///////////
+// AppError //
+//////////////
+
+#[derive(Clone, Debug, Error, Serialize, Deserialize)]
 pub enum AppError {
     //
     #[error("{0} already exists")]
@@ -57,6 +63,16 @@ impl From<anyhow::Error> for AppError {
         Self::from(err.to_string())
     }
 }
+
+impl From<ServerFnError> for AppError {
+    fn from(err: ServerFnError) -> Self {
+        Self::from(err.to_string())
+    }
+}
+
+// /////////////
+// AppUseCase //
+////////////////
 
 #[derive(Debug)]
 pub enum AppUseCase {

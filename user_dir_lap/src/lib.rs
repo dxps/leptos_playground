@@ -1,5 +1,6 @@
+pub mod app_err_uc;
 pub mod domain;
-pub mod errors;
+pub mod dtos;
 pub mod server_fns_todo;
 pub mod ui;
 

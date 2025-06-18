@@ -3,8 +3,8 @@ use std::sync::Arc;
 use randoid::randoid;
 
 use crate::{
-    domain::model::UserAccount,
-    errors::{AppError, AppResult, AppUseCase},
+    dtos::LoginResult,
+    app_err_uc::{AppError, AppUseCase},
     server::UsersRepo,
 };
 
@@ -19,15 +19,24 @@ impl UserMgmt {
         Self { user_repo }
     }
 
-    pub async fn authenticate_user(&self, email: String, pwd: String) -> AppResult<UserAccount> {
+    pub async fn authenticate_user(&self, email: String, pwd: String) -> LoginResult {
         //
-        let user_entry = self
+        match self
             .user_repo
             .get_by_email(&email, AppUseCase::UserLogin)
-            .await?;
-        match Self::check_password(&pwd, &user_entry.password, &user_entry.salt) {
-            true => Ok(user_entry.into()),
-            false => Err(AppError::Unauthorized("wrong credentials".into())),
+            .await
+        {
+            Ok(user_entry) => {
+                match Self::check_password(&pwd, &user_entry.password, &user_entry.salt) {
+                    true => LoginResult {
+                        is_succcess: true,
+                        account: Some(user_entry.into()),
+                        error: None,
+                    },
+                    false => AppError::Unauthorized("wrong credentials".into()).into(),
+                }
+            }
+            Err(err) => err.into(),
         }
     }
 

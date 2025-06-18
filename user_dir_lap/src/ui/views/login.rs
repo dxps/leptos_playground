@@ -1,3 +1,5 @@
+use crate::app_err_uc::AppError;
+use crate::dtos::LoginResult;
 use crate::ui::styles;
 use leptos::logging::log;
 use leptos::prelude::*;
@@ -7,6 +9,7 @@ use leptos::reactive::spawn_local;
 pub fn Login() -> impl IntoView {
     let username = RwSignal::new("".to_string());
     let password = RwSignal::new("".to_string());
+    let login_err: RwSignal<Option<String>> = RwSignal::new(None);
 
     view! {
         <div class="bg-white rounded-md p-6 min-w-[350px]">
@@ -30,16 +33,22 @@ pub fn Login() -> impl IntoView {
                         on:click=move |_| {
                             let username = username.get().clone();
                             let password = password.get().clone();
-                            spawn_local(async {
+                            spawn_local(async move {
                                 match login(username, password).await {
-                                    Ok(res) => log!("login response: '{}'.", res),
-                                    Err(e) => log!("login error: '{}'.", e),
-                                }
+                                    Ok(login_res) => {
+                                        log!("Login result: '{:#?}'", login_res);
+                                    },
+                                    Err(err) => {
+                                        log!("Failed login: '{:#?}'", err);
+                                        login_err.set(Some(err.to_string()));
+                                    },
+                                };
                             });
                         }
                         class="bg-green-100 hover:bg-green-200 drop-shadow-sm px-4 py-1 rounded-md">
                         Login
                     </button>
+                    <p class:hidden=move || login_err.read().is_none()>login_err.get()</p>
                 </div>
             </div>
         </div>
@@ -47,7 +56,7 @@ pub fn Login() -> impl IntoView {
 }
 
 #[server]
-pub async fn login(username: String, password: String) -> Result<String, ServerFnError> {
+pub async fn login(username: String, password: String) -> Result<LoginResult, ServerFnError> {
     //
     use crate::server::Session;
 
@@ -55,8 +64,8 @@ pub async fn login(username: String, password: String) -> Result<String, ServerF
     let sess: Session = leptos_axum::extract().await?;
     log::info!("sess: '{:#?}'", sess);
 
-    let login_res = sess.user_mgmt.authenticate_user(username, password).await?;
+    let login_res = sess.user_mgmt.authenticate_user(username, password).await;
     log::info!("login_res: '{:#?}'", login_res);
 
-    Ok("ok".to_string())
+    Ok(login_res)
 }

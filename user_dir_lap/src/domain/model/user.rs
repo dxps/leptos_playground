@@ -8,6 +8,7 @@ pub struct UserAccount {
     pub id: Id,
     pub email: String,
     pub username: String,
+    pub name: String,
     pub bio: String,
     pub is_anonymous: bool,
     pub permissions: Vec<String>,
@@ -23,6 +24,7 @@ impl Default for UserAccount {
             is_anonymous: true,
             username: "Guest".into(),
             email: "".into(),
+            name: "".into(),
             bio: "".into(),
             permissions: Vec::new(),
         }

@@ -1,4 +1,4 @@
-use crate::errors::{AppError, AppUseCase};
+use crate::app_err_uc::{AppError, AppUseCase};
 use leptos::server_fn::ServerFnError;
 use sqlx::{PgPool, postgres::PgPoolOptions};
 

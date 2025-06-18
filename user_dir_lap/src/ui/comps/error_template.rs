@@ -1,4 +1,4 @@
-use crate::errors::TodoAppError;
+use crate::app_err_uc::TodoAppError;
 use leptos::prelude::*;
 #[cfg(feature = "ssr")]
 use leptos_axum::ResponseOptions;

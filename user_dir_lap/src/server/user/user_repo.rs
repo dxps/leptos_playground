@@ -3,7 +3,7 @@ use std::sync::Arc;
 
 use crate::{
     domain::model::{Id, UserAccount, UserEntry},
-    errors::{AppError, AppResult, AppUseCase},
+    app_err_uc::{AppError, AppResult, AppUseCase},
 };
 
 #[derive(Debug)]
@@ -20,7 +20,7 @@ impl UsersRepo {
     pub async fn get_by_email(&self, email: &String, usecase: AppUseCase) -> AppResult<UserEntry> {
         //
         sqlx::query_as::<_, UserEntry>(
-            "SELECT id, email, username, password, salt, bio, is_anonymous FROM user_accounts 
+            "SELECT id, email, username, password, name, salt, bio, is_anonymous FROM user_accounts 
              WHERE email = $1",
         )
         .bind(email)
@@ -42,6 +42,7 @@ impl FromRow<'_, PgRow> for UserEntry {
                 id: Id::new_from(row.try_get("id").unwrap_or_default()),
                 email: row.get("email"),
                 username: row.get("username"),
+                name: row.get("name"),
                 bio: row.get("bio"),
                 is_anonymous: row.get("is_anonymous"),
                 permissions: Vec::new(),
