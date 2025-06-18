@@ -3,8 +3,9 @@ use std::sync::Arc;
 use randoid::randoid;
 
 use crate::{
+    app_err_uc::{AppError, AppResult, AppUseCase},
+    domain::model::Id,
     dtos::LoginResult,
-    app_err_uc::{AppError, AppUseCase},
     server::UsersRepo,
 };
 
@@ -23,7 +24,7 @@ impl UserMgmt {
         //
         match self
             .user_repo
-            .get_by_email(&email, AppUseCase::UserLogin)
+            .get_by_username(&email, AppUseCase::UserLogin)
             .await
         {
             Ok(user_entry) => {
@@ -37,6 +38,44 @@ impl UserMgmt {
                 }
             }
             Err(err) => err.into(),
+        }
+    }
+
+    pub async fn register_admin_user(
+        &self,
+        name: String,
+        email: String,
+        username: String,
+        pwd: String,
+    ) -> AppResult<Id> {
+        //
+        let (pwd, salt) = Self::generate_password(pwd);
+        self.user_repo
+            .save_with_permissions(
+                &name,
+                &email,
+                &username,
+                &pwd,
+                &salt,
+                vec!["Admin::Read".to_string(), "Admin::Write".to_string()],
+            )
+            .await
+    }
+
+    pub async fn update_password(
+        &self,
+        user_id: &Id,
+        curr_password: String,
+        new_password: String,
+    ) -> AppResult<()> {
+        //
+        let ups = self.user_repo.get_password_by_id(user_id).await?;
+        match Self::check_password(&curr_password, &ups.password, &ups.salt) {
+            true => {
+                let new_hash_pwd = Self::regenerate_password(new_password, ups.salt);
+                self.user_repo.update_password(user_id, new_hash_pwd).await
+            }
+            false => Err(AppError::Unauthorized("wrong password".into())),
         }
     }
 

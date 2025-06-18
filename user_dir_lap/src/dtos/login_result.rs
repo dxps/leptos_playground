@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{app_err_uc::AppError, domain::model::UserAccount};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct LoginResult {
     pub is_succcess: bool,
     pub account: Option<UserAccount>,

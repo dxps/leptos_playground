@@ -48,6 +48,20 @@ async fn main() {
 
     let state = ServerState::new(Arc::new(dbcp.clone()));
 
+    match state
+        .user_mgmt
+        .register_admin_user(
+            "Admin".into(),
+            "admin@example.com".into(),
+            "admin".into(),
+            "admin".into(),
+        )
+        .await
+    {
+        Ok(_) => log::info!("Self-registered the admin user."),
+        Err(err) => log::error!("Failed to self-register the admin user: {}", err),
+    }
+
     // Setting this to None means we'll be using cargo-leptos and its env vars.
     let conf = get_configuration(None).unwrap();
     let leptos_options = conf.leptos_options;
