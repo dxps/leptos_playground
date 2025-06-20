@@ -7,6 +7,8 @@ use sqlx::PgPool;
 use crate::domain::model::{Id, UserAccount};
 
 pub type AuthSession = axum_session_auth::AuthSession<UserAccount, Id, SessionPgPool, PgPool>;
+pub type AuthSessionLayer =
+    axum_session_auth::AuthSessionLayer<UserAccount, Id, SessionPgPool, PgPool>;
 
 #[async_trait]
 impl Authentication<UserAccount, Id, PgPool> for UserAccount {

@@ -3,9 +3,11 @@ use crate::ui::styles;
 use leptos::logging::log;
 use leptos::prelude::*;
 use leptos::reactive::spawn_local;
+use leptos_router::NavigateOptions;
 
 #[component]
 pub fn Login() -> impl IntoView {
+    //
     let username = RwSignal::new("".to_string());
     let password = RwSignal::new("".to_string());
     let login_err: RwSignal<Option<String>> = RwSignal::new(None);
@@ -21,6 +23,14 @@ pub fn Login() -> impl IntoView {
         }
         None => "".to_string(),
     };
+    let login_ok = RwSignal::new(false);
+
+    let navigate = leptos_router::hooks::use_navigate();
+    Effect::new(move |_| {
+        if login_ok.get() {
+            navigate("/", NavigateOptions::default());
+        }
+    });
 
     view! {
         <div class="bg-white rounded-md p-6 min-w-[350px]">
@@ -50,6 +60,7 @@ pub fn Login() -> impl IntoView {
                                         if login_res.is_succcess {
                                             login_err.set(None);
                                             log!("Login succeeded.");
+                                            login_ok.set(true);
                                         } else {
                                             let err = login_res.error.unwrap().to_string();
                                             log!("Login failed with error: '{:#?}'.", err);

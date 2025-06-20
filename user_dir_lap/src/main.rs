@@ -20,16 +20,13 @@ async fn main() {
     use std::sync::Arc;
 
     use axum::Extension;
-    // use axum::Extension;
     use axum_session::{SessionConfig, SessionLayer};
-    use axum_session_auth::{AuthConfig, AuthSessionLayer};
-    use axum_session_sqlx::{SessionPgPool, SessionPgSessionStore};
-    use sqlx::PgPool;
+    use axum_session_auth::AuthConfig;
+    use axum_session_sqlx::SessionPgSessionStore;
     use ssr_imports::*;
-    // use std::sync::Arc;
     use user_dir_lap::{
-        domain::model::{Id, UserAccount},
-        server::{ServerState, init_logging},
+        domain::model::Id,
+        server::{AuthSessionLayer, ServerState, init_logging},
     };
 
     init_logging();
@@ -40,6 +37,7 @@ async fn main() {
         .await
         .expect("Failed to connect to the database!");
     log::info!("Connected to database.");
+
     let session_config = SessionConfig::default().with_table_name("user_sessions");
     let session_store = SessionPgSessionStore::new(Some(dbcp.clone().into()), session_config)
         .await
@@ -75,10 +73,7 @@ async fn main() {
         .route("/api/{*fn_name}", post(leptos_axum::handle_server_fns))
         .fallback(file_or_index_handler)
         .with_state(leptos_options)
-        .layer(
-            AuthSessionLayer::<UserAccount, Id, SessionPgPool, PgPool>::new(Some(dbcp))
-                .with_config(auth_config),
-        )
+        .layer(AuthSessionLayer::new(Some(dbcp)).with_config(auth_config))
         .layer(SessionLayer::new(session_store))
         .layer(Extension(state));
 
