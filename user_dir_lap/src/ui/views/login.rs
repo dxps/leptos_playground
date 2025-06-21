@@ -1,9 +1,11 @@
 use crate::dtos::LoginResult;
+use crate::ui::state::{UiState, UiStateStoreFields};
 use crate::ui::styles;
 use leptos::logging::log;
 use leptos::prelude::*;
 use leptos::reactive::spawn_local;
 use leptos_router::NavigateOptions;
+use reactive_stores::Store;
 
 #[component]
 pub fn Login() -> impl IntoView {
@@ -25,9 +27,15 @@ pub fn Login() -> impl IntoView {
     };
     let login_ok = RwSignal::new(false);
 
+    let state = expect_context::<Store<UiState>>();
     let navigate = leptos_router::hooks::use_navigate();
     Effect::new(move |_| {
         if login_ok.get() {
+            state.is_logged_in().set(true);
+            log!(
+                "Updated ui state with is_logged_in: {}",
+                state.is_logged_in().get()
+            );
             navigate("/", NavigateOptions::default());
         }
     });
