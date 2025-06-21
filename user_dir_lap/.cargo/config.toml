@@ -1,0 +1,9 @@
+
+###############################
+[target.wasm32-unknown-unknown]
+###############################
+
+rustflags = [
+   "--cfg",
+   "erase_components",
+]
