@@ -4,7 +4,10 @@ use axum_session_auth::*;
 use axum_session_sqlx::SessionPgPool;
 use sqlx::PgPool;
 
-use crate::domain::model::{Id, UserAccount};
+use crate::{
+    domain::model::{Id, UserAccount},
+    server::UsersRepo,
+};
 
 pub type AuthSession = axum_session_auth::AuthSession<UserAccount, Id, SessionPgPool, PgPool>;
 pub type AuthSessionLayer =
@@ -13,12 +16,15 @@ pub type AuthSessionLayer =
 #[async_trait]
 impl Authentication<UserAccount, Id, PgPool> for UserAccount {
     //
-    async fn load_user(_user_id: Id, pool: Option<&PgPool>) -> Result<UserAccount, anyhow::Error> {
-        let _pool = pool.unwrap();
-        // UsersRepo::get_by_id(&user_id, pool)
-        //     .await
-        //     .ok_or_else(|| anyhow::anyhow!("Could not load user"))
-        Err(anyhow::anyhow!("Not implemented"))
+    async fn load_user(user_id: Id, pool: Option<&PgPool>) -> Result<UserAccount, anyhow::Error> {
+        let pool = pool.unwrap();
+        UsersRepo::get_by_id(&user_id, pool).await.map_or_else(
+            || Err(anyhow::anyhow!("Could not load user")),
+            |v| {
+                log::debug!("Loaded user: {:#?}", v);
+                Ok(v)
+            },
+        )
     }
 
     fn is_authenticated(&self) -> bool {

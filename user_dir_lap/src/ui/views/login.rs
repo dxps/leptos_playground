@@ -1,4 +1,4 @@
-use crate::dtos::LoginResult;
+use crate::ui::logic::login;
 use crate::ui::state::{UiState, UiStateStoreFields};
 use crate::ui::styles;
 use leptos::logging::log;
@@ -90,20 +90,4 @@ pub fn Login() -> impl IntoView {
             </div>
         </div>
     }
-}
-
-#[server]
-pub async fn login(username: String, password: String) -> Result<LoginResult, ServerFnError> {
-    //
-    use crate::server::Session;
-
-    let sess: Session = leptos_axum::extract().await?;
-
-    let login_res = sess.user_mgmt.authenticate_user(username, password).await;
-    if login_res.is_succcess {
-        sess.auth_session
-            .login_user(login_res.clone().account.unwrap().id);
-    }
-
-    Ok(login_res)
 }

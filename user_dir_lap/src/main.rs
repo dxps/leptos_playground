@@ -71,6 +71,7 @@ async fn main() {
         // a manual handler for the server fns.
         // This should include a get() handler if we have any GetUrl-based server fns.
         .route("/api/{*fn_name}", post(leptos_axum::handle_server_fns))
+        .route("/api/{*fn_name}", get(leptos_axum::handle_server_fns))
         .fallback(file_or_index_handler)
         .with_state(leptos_options)
         .layer(AuthSessionLayer::new(Some(dbcp)).with_config(auth_config))

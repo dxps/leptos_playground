@@ -46,6 +46,27 @@ impl UsersRepo {
         .map_err(|err| AppError::from((err, usecase)))
     }
 
+    pub async fn get_by_id(id: &Id, pool: &PgPool) -> Option<UserAccount> {
+        //
+        let mut user_account = sqlx::query_as::<_, UserAccount>(
+            "SELECT id, email, username, bio, is_anyonymous FROM user_accounts WHERE id = $1",
+        )
+        .bind(id.as_str())
+        .fetch_one(pool)
+        .await
+        .ok()?;
+
+        let mut permissions =
+            sqlx::query("SELECT permission FROM user_permissions WHERE user_id = $1;")
+                .map(|r: PgRow| r.get("permission"))
+                .fetch_all(pool)
+                .await
+                .ok()?;
+
+        user_account.permissions.append(&mut permissions);
+        Some(user_account)
+    }
+
     pub async fn save_with_permissions(
         &self,
         name: &String,
@@ -158,6 +179,21 @@ impl FromRow<'_, PgRow> for UserPasswordSalt {
         Ok(Self {
             password: row.get("password"),
             salt: row.get("salt"),
+        })
+    }
+}
+
+impl FromRow<'_, PgRow> for UserAccount {
+    //
+    fn from_row(row: &PgRow) -> Result<Self, sqlx::Error> {
+        Ok(Self {
+            id: Id::new_from(row.get("id")),
+            email: row.get("email"),
+            username: row.get("username"),
+            name: row.get("name"),
+            bio: row.get("bio"),
+            is_anonymous: row.get("is_anonymous"),
+            permissions: Vec::new(),
         })
     }
 }

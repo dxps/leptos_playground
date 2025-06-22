@@ -7,13 +7,22 @@ use http::request::Parts;
 
 #[cfg(feature = "ssr")]
 use crate::server::AuthSessionLayerNotFound;
-use crate::server::{AuthSession, UserMgmt};
+use crate::{
+    domain::model::UserAccount,
+    server::{AuthSession, UserMgmt},
+};
 
 #[derive(Debug)]
 pub struct Session {
     //
     pub user_mgmt: Arc<UserMgmt>,
     pub auth_session: AuthSession,
+}
+
+impl Session {
+    pub fn current_user(&self) -> Option<UserAccount> {
+        self.auth_session.current_user.clone()
+    }
 }
 
 #[cfg(feature = "ssr")]
