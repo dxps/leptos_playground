@@ -13,7 +13,6 @@ pub fn Navbar() -> impl IntoView {
     //
     let state = move || {
         let state = expect_context::<Store<UiState>>();
-        log!("Checking the current user ...");
         if !state.is_inited().get() {
             log!("Initing the ui state ...");
             LocalResource::new(move || get_current_user())

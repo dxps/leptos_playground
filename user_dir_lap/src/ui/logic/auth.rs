@@ -1,8 +1,8 @@
 use crate::{domain::model::UserAccount, dtos::LoginResult};
 use leptos::prelude::*;
-use server_fn::codec::GetUrl;
+use server_fn::codec::{GetUrl, PostUrl};
 
-#[server]
+#[server(endpoint = "login", input = PostUrl)]
 pub async fn login(username: String, password: String) -> Result<LoginResult, ServerFnError> {
     //
     use crate::server::Session;
@@ -39,11 +39,29 @@ pub async fn is_logged_in() -> Result<bool, ServerFnError> {
     Ok(sess.auth_session.is_authenticated())
 }
 
-#[server(endpoint = "get_current_user", input = GetUrl)]
+#[server(endpoint = "current_user", input = GetUrl)]
 pub async fn get_current_user() -> Result<Option<UserAccount>, ServerFnError> {
     //
     use crate::server::Session;
 
-    let sess: Session = leptos_axum::extract().await?;
-    Ok(sess.current_user())
+    let mut sess: Session = leptos_axum::extract().await?;
+    let mut curr_user = sess.current_user();
+    log::debug!(
+        "Current user: {:?} is_authenticated: {}",
+        sess.auth_session.current_user,
+        sess.auth_session.is_authenticated()
+    );
+
+    // Additional investigation.
+    if curr_user.is_none() {
+        sess.auth_session.reload_user().await;
+        curr_user = sess.current_user();
+        log::debug!(
+            "After reloading, current user: {:?} is_authenticated: {}",
+            sess.auth_session.current_user,
+            sess.auth_session.is_authenticated()
+        );
+    }
+
+    Ok(curr_user)
 }

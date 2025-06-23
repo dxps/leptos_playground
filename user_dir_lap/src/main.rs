@@ -38,7 +38,9 @@ async fn main() {
         .expect("Failed to connect to the database!");
     log::info!("Connected to database.");
 
-    let session_config = SessionConfig::default().with_table_name("user_sessions");
+    let session_config = SessionConfig::default()
+        .with_session_name("user_dir_lap_session")
+        .with_table_name("user_sessions");
     let session_store = SessionPgSessionStore::new(Some(dbcp.clone().into()), session_config)
         .await
         .unwrap();
@@ -69,7 +71,6 @@ async fn main() {
         // The server function handlers are normally set up by `.leptos_routes()`.
         // Here, we're not actually doing server side rendering, but setting up
         // a manual handler for the server fns.
-        // This should include a get() handler if we have any GetUrl-based server fns.
         .route("/api/{*fn_name}", post(leptos_axum::handle_server_fns))
         .route("/api/{*fn_name}", get(leptos_axum::handle_server_fns))
         .fallback(file_or_index_handler)
