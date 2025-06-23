@@ -19,11 +19,11 @@ impl Authentication<UserAccount, Id, PgPool> for UserAccount {
     async fn load_user(user_id: Id, pool: Option<&PgPool>) -> Result<UserAccount, anyhow::Error> {
         let pool = pool.unwrap();
         UsersRepo::get_by_id(&user_id, pool).await.map_or_else(
-            || Err(anyhow::anyhow!("Could not load user")),
-            |v| {
-                log::debug!("Loaded user: {:#?}", v);
-                Ok(v)
+            || {
+                log::debug!("Could not load user w/ id: {user_id}.");
+                Err(anyhow::anyhow!("Could not load user"))
             },
+            Ok,
         )
     }
 

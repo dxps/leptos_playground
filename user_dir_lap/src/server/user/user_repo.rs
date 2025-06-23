@@ -49,21 +49,32 @@ impl UsersRepo {
     pub async fn get_by_id(id: &Id, pool: &PgPool) -> Option<UserAccount> {
         //
         let mut user_account = sqlx::query_as::<_, UserAccount>(
-            "SELECT id, email, username, bio, is_anyonymous FROM user_accounts WHERE id = $1",
+            "SELECT id, name, email, username, bio, is_anonymous FROM user_accounts WHERE id = $1",
         )
         .bind(id.as_str())
         .fetch_one(pool)
         .await
+        .map_err(|err| {
+            log::error!("Could not load user account w/ id: {id}. Error: {err}");
+            AppError::from(err)
+        })
         .ok()?;
 
         let mut permissions =
             sqlx::query("SELECT permission FROM user_permissions WHERE user_id = $1;")
+                .bind(id.as_str())
                 .map(|r: PgRow| r.get("permission"))
                 .fetch_all(pool)
                 .await
+                .map_err(|err| {
+                    log::error!(
+                        "Could not load permissions for user account w/ id: {id}. Error: {err}"
+                    );
+                    AppError::from(err)
+                })
                 .ok()?;
-
         user_account.permissions.append(&mut permissions);
+
         Some(user_account)
     }
 
