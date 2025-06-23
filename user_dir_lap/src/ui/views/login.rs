@@ -62,7 +62,7 @@ pub fn Login() -> impl IntoView {
                         on:click=move |_| {
                             let username = username.get().clone();
                             let password = password.get().clone();
-                            spawn_local(async move {
+                            _ = spawn_local(async move {
                                 match login(username, password).await {
                                     Ok(login_res) => {
                                         if login_res.is_succcess {
