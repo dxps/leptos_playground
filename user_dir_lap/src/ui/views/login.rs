@@ -82,7 +82,7 @@ pub fn Login() -> impl IntoView {
                                 };
                             });
                         }
-                        class="bg-green-100 hover:bg-green-200 drop-shadow-sm px-4 mt-6 py-1 rounded-md">
+                        class=styles::BUTTON_CSS>
                         Login
                     </button>
                     <p class:hidden=hide_login_err>{login_err_txt}</p>

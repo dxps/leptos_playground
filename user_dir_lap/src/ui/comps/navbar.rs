@@ -20,10 +20,17 @@ pub fn Navbar() -> impl IntoView {
             spawn_local(async move {
                 _ = get_current_user()
                     .await
-                    .map(|res| {
-                        log!("Got current user account res: {res:?}");
-                        state.is_logged_in().set(true);
-                        state.account().set(res);
+                    .map(|res| match res {
+                        Some(account) => {
+                            log!("Got current user account: {account:?}");
+                            state.is_logged_in().set(true);
+                            state.account().set(Some(account));
+                        }
+                        None => {
+                            log!("No current user account found.");
+                            state.is_logged_in().set(false);
+                            state.account().set(None);
+                        }
                     })
                     .map_err(|err| {
                         log!("Failed to get the current user. Error: {}", err);
@@ -32,9 +39,6 @@ pub fn Navbar() -> impl IntoView {
             state.is_inited().set(true);
         }
     });
-
-    // let _state_inited = Signal::derive(move || state.is_inited().get());
-    // let _logged_in = Signal::derive(move || state.is_logged_in().get());
 
     view! {
         <nav class="absolute w-full px-4 py-1 flex justify-between items-center bg-white z-40">
