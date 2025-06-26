@@ -23,9 +23,9 @@ impl UiState {
         }
     }
 
-    pub fn clear(&mut self) {
-        self.is_inited = false;
-        self.is_logged_in = false;
-        self.account = None;
-    }
+    // pub fn clear(&mut self) {
+    //     self.is_inited = false;
+    //     self.is_logged_in = false;
+    //     self.account = None;
+    // }
 }

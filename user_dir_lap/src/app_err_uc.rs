@@ -36,6 +36,9 @@ pub enum AppError {
 
     #[error("The pair of name and description must be unique.")]
     NameDescriptionNotUnique,
+
+    #[error("not found")]
+    NotFound,
 }
 
 impl From<&str> for AppError {

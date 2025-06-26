@@ -16,11 +16,8 @@ pub fn Logout() -> impl IntoView {
 
     Effect::new(move |_| {
         if logout_ok.get() {
-            state.get().clear();
-            log!(
-                "Ui state has been cleared. is_logged_in()={}",
-                state.is_logged_in().get()
-            );
+            state.is_logged_in().set(false);
+            log!("Logged out is complete.");
             navigate("/", NavigateOptions::default());
         }
     });

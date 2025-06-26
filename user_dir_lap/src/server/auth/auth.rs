@@ -20,7 +20,7 @@ impl Authentication<UserAccount, Id, PgPool> for UserAccount {
         let pool = pool.unwrap();
         UsersRepo::get_by_id(&user_id, pool).await.map_or_else(
             || {
-                log::debug!("Could not load user w/ id: {user_id}.");
+                log::debug!("[load_user] No user account w/ id: {user_id} exist.");
                 Err(anyhow::anyhow!("Could not load user"))
             },
             Ok,

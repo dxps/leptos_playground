@@ -59,7 +59,15 @@ async fn main() {
         .await
     {
         Ok(_) => log::info!("Self-registered the admin user."),
-        Err(err) => log::error!("Failed to self-register the admin user: {}", err),
+        Err(e) => {
+            use user_dir_lap::app_err_uc::AppError;
+
+            if let AppError::AlreadyExists(uc_info) = e {
+                // It's fine if the admin user already exists.
+            } else {
+                log::error!("Failed to self-register the admin user: {}", e);
+            }
+        }
     }
 
     // Setting this to None means we'll be using cargo-leptos and its env vars.

@@ -28,11 +28,14 @@ impl From<sqlx::Error> for AppError {
     //
     fn from(err: sqlx::Error) -> Self {
         //
+
         let mut app_err = AppError::Ignorable;
         log::debug!("from(sqlx:Error): err={:?}", err);
         if err.as_database_error().is_some() {
             // FYI: For now, any db error is considered as internal error.
             app_err = AppError::InternalErr
+        } else if let sqlx::Error::RowNotFound = err {
+            app_err = AppError::NotFound
         }
         app_err
     }

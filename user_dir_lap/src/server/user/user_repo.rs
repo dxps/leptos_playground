@@ -1,5 +1,5 @@
 use sqlx::{FromRow, PgPool, Row, postgres::PgRow};
-use std::sync::Arc;
+use std::{error::Error, sync::Arc};
 
 use crate::{
     app_err_uc::{AppError, AppResult, AppUseCase},
@@ -54,10 +54,7 @@ impl UsersRepo {
         .bind(id.as_str())
         .fetch_one(pool)
         .await
-        .map_err(|err| {
-            log::error!("Could not load user account w/ id: {id}. Error: {err}");
-            AppError::from(err)
-        })
+        .map_err(AppError::from)
         .ok()?;
 
         let mut permissions =

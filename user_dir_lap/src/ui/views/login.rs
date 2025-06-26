@@ -29,6 +29,7 @@ pub fn Login() -> impl IntoView {
 
     let state = expect_context::<Store<UiState>>();
     let navigate = leptos_router::hooks::use_navigate();
+
     Effect::new(move |_| {
         if login_ok.get() {
             state.is_logged_in().set(true);
