@@ -1,5 +1,5 @@
 use sqlx::{FromRow, PgPool, Row, postgres::PgRow};
-use std::{error::Error, sync::Arc};
+use std::sync::Arc;
 
 use crate::{
     app_err_uc::{AppError, AppResult, AppUseCase},

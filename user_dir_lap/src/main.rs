@@ -62,7 +62,7 @@ async fn main() {
         Err(e) => {
             use user_dir_lap::app_err_uc::AppError;
 
-            if let AppError::AlreadyExists(uc_info) = e {
+            if let AppError::AlreadyExists(_) = e {
                 // It's fine if the admin user already exists.
             } else {
                 log::error!("Failed to self-register the admin user: {}", e);
