@@ -1,6 +1,7 @@
 use crate::ui::logic::login;
 use crate::ui::state::{UiState, UiStateStoreFields};
 use crate::ui::styles;
+use leptos::ev::{KeyboardEvent, MouseEvent};
 use leptos::logging::log;
 use leptos::reactive::spawn_local;
 use leptos::{html, prelude::*};
@@ -14,7 +15,38 @@ pub fn Login() -> impl IntoView {
 
     let username = RwSignal::new("".to_string());
     let password = RwSignal::new("".to_string());
+    let login_ok = RwSignal::new(false);
     let login_err: RwSignal<Option<String>> = RwSignal::new(None);
+
+    let login_handler = move |_| {
+        let username = username.get().clone();
+        let password = password.get().clone();
+        _ = spawn_local(async move {
+            match login(username, password).await {
+                Ok(login_res) => {
+                    if login_res.is_succcess {
+                        login_err.set(None);
+                        log!("Login succeeded.");
+                        login_ok.set(true);
+                    } else {
+                        let err = login_res.error.unwrap().to_string();
+                        log!("Login failed with error: '{:#?}'.", err);
+                        login_err.set(Some(err));
+                    }
+                }
+                Err(err) => {
+                    log!("Login failed internall with error: '{:#?}'.", err);
+                    login_err.set(Some(err.to_string()));
+                }
+            };
+        });
+    };
+
+    let on_password_keydown = move |event: KeyboardEvent| {
+        if event.key() == "Enter" {
+            login_handler(MouseEvent::new("click").unwrap());
+        }
+    };
 
     let hide_login_err = move || login_err.get().is_none();
     let login_err_txt = move || match login_err.get() {
@@ -27,7 +59,6 @@ pub fn Login() -> impl IntoView {
         }
         None => "".to_string(),
     };
-    let login_ok = RwSignal::new(false);
 
     let state = expect_context::<Store<UiState>>();
     let navigate = leptos_router::hooks::use_navigate();
@@ -66,32 +97,12 @@ pub fn Login() -> impl IntoView {
                     />
                     <input type="password" id="password" placeholder="Password"
                         autocomplete="off" bind:value=password
+                        on:keydown=on_password_keydown
                         class="px-3 py-1 rounded-lg outline-none border-1.5 focus:border-green-300 w-64"
                     />
                     <button
-                        on:click=move |_| {
-                            let username = username.get().clone();
-                            let password = password.get().clone();
-                            _ = spawn_local(async move {
-                                match login(username, password).await {
-                                    Ok(login_res) => {
-                                        if login_res.is_succcess {
-                                            login_err.set(None);
-                                            log!("Login succeeded.");
-                                            login_ok.set(true);
-                                        } else {
-                                            let err = login_res.error.unwrap().to_string();
-                                            log!("Login failed with error: '{:#?}'.", err);
-                                            login_err.set(Some(err));
-                                        }
-                                    },
-                                    Err(err) => {
-                                        log!("Login failed internall with error: '{:#?}'.", err);
-                                        login_err.set(Some(err.to_string()));
-                                    },
-                                };
-                            });
-                        }
+                        on:click=login_handler
+                        disabled=move || username.get().is_empty() || password.get().is_empty()
                         class=styles::BUTTON_CSS>
                         Login
                     </button>
