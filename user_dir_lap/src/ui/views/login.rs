@@ -2,14 +2,16 @@ use crate::ui::logic::login;
 use crate::ui::state::{UiState, UiStateStoreFields};
 use crate::ui::styles;
 use leptos::logging::log;
-use leptos::prelude::*;
 use leptos::reactive::spawn_local;
+use leptos::{html, prelude::*};
 use leptos_router::NavigateOptions;
 use reactive_stores::Store;
 
 #[component]
 pub fn Login() -> impl IntoView {
     //
+    let username_elem: NodeRef<html::Input> = NodeRef::new();
+
     let username = RwSignal::new("".to_string());
     let password = RwSignal::new("".to_string());
     let login_err: RwSignal<Option<String>> = RwSignal::new(None);
@@ -41,6 +43,12 @@ pub fn Login() -> impl IntoView {
         }
     });
 
+    Effect::new(move || {
+        if let Some(node) = username_elem.get() {
+            _ = (*node).focus();
+        }
+    });
+
     view! {
         <div class="bg-white rounded-md p-6 min-w-[350px]">
             <div class="flex">
@@ -52,11 +60,12 @@ pub fn Login() -> impl IntoView {
                 <p>Use your credentials to authenticate.</p>
                 <div class="flex flex-col items-center mt-8 mb-12 space-y-4">
                     <input type="text" id="username" placeholder="Username"
-                        autofocus autocomplete="off" bind:value=username
+                        autocomplete="off" bind:value=username
+                        node_ref=username_elem
                         class="px-3 py-1 rounded-lg outline-none border-1.5 focus:border-green-300 w-64"
                     />
                     <input type="password" id="password" placeholder="Password"
-                        autofocus autocomplete="off" bind:value=password
+                        autocomplete="off" bind:value=password
                         class="px-3 py-1 rounded-lg outline-none border-1.5 focus:border-green-300 w-64"
                     />
                     <button
