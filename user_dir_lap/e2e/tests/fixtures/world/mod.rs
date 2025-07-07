@@ -3,11 +3,9 @@ pub mod check_steps;
 
 use anyhow::Result;
 use cucumber::World;
-use fantoccini::{
-    error::NewSessionError, wd::Capabilities, Client, ClientBuilder,
-};
+use fantoccini::{Client, ClientBuilder, error::NewSessionError, wd::Capabilities};
 
-pub const HOST: &str = "http://127.0.0.1:3000";
+pub const HOST: &str = "http://127.0.0.1:9000";
 
 #[derive(Debug, World)]
 #[world(init = Self::new)]

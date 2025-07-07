@@ -1,17 +1,12 @@
 #[cfg(feature = "ssr")]
-#[allow(unused)]
+#[allow(non_snake_case)]
 mod ssr_imports {
     pub use axum::{
         Router,
-        body::Body as AxumBody,
-        extract::{Path, State},
-        http::Request,
-        response::{Html, IntoResponse, Response},
         routing::{get, post},
     };
     pub use leptos::prelude::*;
-    pub use leptos_axum::{LeptosRoutes, generate_route_list};
-    pub use user_dir_lap::{server::file_or_index_handler, server_fns_todo::*, *};
+    pub use user_dir_lap::{server::file_or_index_handler, *};
 }
 
 #[cfg(feature = "ssr")]
