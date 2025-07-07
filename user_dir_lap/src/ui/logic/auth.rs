@@ -1,3 +1,6 @@
+#[cfg(feature = "ssr")]
+use crate::server::Session;
+
 use crate::{domain::model::UserAccount, dtos::LoginResult};
 use leptos::prelude::*;
 use server_fn::codec::{GetUrl, PostUrl};
@@ -5,8 +8,6 @@ use server_fn::codec::{GetUrl, PostUrl};
 #[server(endpoint = "login", input = PostUrl)]
 pub async fn login(username: String, password: String) -> Result<LoginResult, ServerFnError> {
     //
-    use crate::server::Session;
-
     let sess: Session = leptos_axum::extract().await?;
 
     let login_res = sess.user_mgmt.authenticate_user(username, password).await;
@@ -15,17 +16,13 @@ pub async fn login(username: String, password: String) -> Result<LoginResult, Se
         log::debug!("Logged in user w/ id: {user_id}");
         sess.auth_session.login_user(user_id);
     }
-
     Ok(login_res)
 }
 
 #[server]
 pub async fn logout() -> Result<(), ServerFnError> {
     //
-    use crate::server::Session;
-
     let sess: Session = leptos_axum::extract().await?;
-
     sess.auth_session.logout_user();
     Ok(())
 }
@@ -33,8 +30,6 @@ pub async fn logout() -> Result<(), ServerFnError> {
 #[server]
 pub async fn is_logged_in() -> Result<bool, ServerFnError> {
     //
-    use crate::server::Session;
-
     let sess: Session = leptos_axum::extract().await?;
     Ok(sess.auth_session.is_authenticated())
 }
@@ -42,8 +37,6 @@ pub async fn is_logged_in() -> Result<bool, ServerFnError> {
 #[server(endpoint = "current_user", input = GetUrl)]
 pub async fn get_current_user() -> Result<Option<UserAccount>, ServerFnError> {
     //
-    use crate::server::Session;
-
     let sess: Session = leptos_axum::extract().await?;
     let curr_user_account = sess.auth_session.current_user.clone();
     log::debug!(
@@ -51,6 +44,5 @@ pub async fn get_current_user() -> Result<Option<UserAccount>, ServerFnError> {
         curr_user_account,
         &sess.auth_session.is_authenticated()
     );
-
     Ok(curr_user_account)
 }
