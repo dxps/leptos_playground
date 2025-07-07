@@ -31,6 +31,12 @@ impl Default for UserAccount {
     }
 }
 
+impl UserAccount {
+    pub fn is_admin_read(&self) -> bool {
+        self.permissions.contains(&"Admin::Read".into())
+    }
+}
+
 #[derive(Debug)]
 /// It includes all user attributes that are persisted in the database.
 pub struct UserEntry {

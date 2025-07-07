@@ -59,9 +59,14 @@ pub fn Navbar() -> impl IntoView {
                     <li class="text-gray-400">
                         <NavSep/>
                     </li>
-                    <li>
-                        <a href="/accounts" class=NAVBAR_LIST_ITEM>Accounts</a>
-                    </li>
+                    <Show
+                        when=move || {
+                            state.account().get().is_some() && state.account().get().unwrap().is_admin_read()
+                        }>
+                        <li>
+                            <a href="/accounts" class=NAVBAR_LIST_ITEM>Accounts</a>
+                        </li>
+                    </Show>
                 </ul>
                 <NavUserMenu/>
             </Show>
