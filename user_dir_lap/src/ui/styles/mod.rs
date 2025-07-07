@@ -2,6 +2,8 @@ pub const TITLE_CSS: &str = "flex-grow text-lg font-medium px-2 text-center text
 
 pub const NAVBAR_LINK: &str = "text-sm text-gray-600 py-1 px-4 hover:bg-gray-100 rounded-lg transition duration-200 sm:inline-block sm:ml-auto sm:mr-3";
 
+pub const USER_MENU_LINK: &str = "py-2.5 px-7 min-w-full w-max min-h-full flex text-[#333]";
+
 /// The (top-right) close symbol.
 pub const CLOSE_SYMBOL_CSS: &str = "text-gray-400 text-xl hover:text-gray-900 hover:bg-gray-100 px-2 rounded-xl transition duration-200 cursor-pointer";
 

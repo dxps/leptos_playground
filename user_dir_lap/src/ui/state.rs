@@ -12,6 +12,9 @@ pub struct UiState {
 
     /// In case the user is logged in, his account is present here.
     pub account: Option<UserAccount>,
+
+    /// Tells if the user menu (dropdown) is open or not.
+    pub open_user_menu: bool,
 }
 
 impl UiState {
@@ -20,12 +23,7 @@ impl UiState {
             is_inited: false,
             is_logged_in: false,
             account: None,
+            open_user_menu: false,
         }
     }
-
-    // pub fn clear(&mut self) {
-    //     self.is_inited = false;
-    //     self.is_logged_in = false;
-    //     self.account = None;
-    // }
 }
