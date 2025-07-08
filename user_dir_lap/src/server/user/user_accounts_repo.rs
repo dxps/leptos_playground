@@ -8,11 +8,11 @@ use crate::{
 };
 
 #[derive(Debug)]
-pub struct UsersRepo {
+pub struct UserAccountsRepo {
     dbcp: Arc<PgPool>,
 }
 
-impl UsersRepo {
+impl UserAccountsRepo {
     //
     pub fn new(dbcp: Arc<PgPool>) -> Self {
         Self { dbcp }

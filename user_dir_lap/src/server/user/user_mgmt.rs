@@ -6,17 +6,17 @@ use crate::{
     app_err_uc::{AppError, AppResult, AppUseCase},
     domain::model::Id,
     dtos::LoginResult,
-    server::UsersRepo,
+    server::UserAccountsRepo,
 };
 
 #[derive(Clone, Debug)]
 pub struct UserMgmt {
-    user_repo: Arc<UsersRepo>,
+    user_repo: Arc<UserAccountsRepo>,
 }
 
 impl UserMgmt {
     //
-    pub fn new(user_repo: Arc<UsersRepo>) -> Self {
+    pub fn new(user_repo: Arc<UserAccountsRepo>) -> Self {
         Self { user_repo }
     }
 

@@ -15,11 +15,17 @@ Technical capabilities (showcases):
 
 Install the following:
 
--   [Rust](https://www.rust-lang.org/tools/install)
--   [Docker](https://www.docker.com/get-docker)
--   [Tailwind CLI](https://tailwindcss.com/docs/installation/tailwind-cli) using `npm install tailwindcss @tailwindcss/cli`\
-    Version 4.1 is available and used at the time of this writing.
--   Cargo Leptos plugin using `cargo install --locked cargo-leptos`
+-   To build the Rust code:
+    -   [Rust](https://www.rust-lang.org/tools/install)
+    -   Cargo Leptos plugin\
+        Install it using `cargo install --locked cargo-leptos`
+-   To start a PostgreSQL instance locally
+    -   As a [Docker](https://www.docker.com/get-docker) container.
+    -   Alternatively, you can use an existing PostgreSQL instance and configure the `DATABASE_URL` environment variable (in `.env` file).
+-   To build (update) the `main.css` file:
+    -   This is needed only if you use additional Tailwind CSS rules.
+    -   Otherwise, you can skip this step.
+    -   Install it using `npm install tailwindcss@4.1.11 @tailwindcss/cli@4.1.11`
 
 <br/>
 
@@ -27,5 +33,5 @@ Install the following:
 
 Run the followings:
 
--   `./run_css.sh` to compile Tailwind CSS related styles.
--   `./run_svc.sh` to start the service.
+-   `./dev_css.sh` to compile Tailwind CSS related styles.
+-   `./dev_svc.sh` to start the service.

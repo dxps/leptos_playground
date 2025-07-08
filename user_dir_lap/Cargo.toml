@@ -52,6 +52,7 @@ dotenvy = { version = "=0.15.7", optional = true }
 randoid = { version = "=0.3.0", optional = true }
 md5 = { version = "=0.8.0", optional = true }
 reactive_stores = { version = "=0.2.2" }
+leptos-struct-table = "0.15.0"
 
 ##########
 [features]

@@ -10,7 +10,7 @@ use axum::extract::{FromRef, FromRequestParts};
 #[cfg(feature = "ssr")]
 use http::{StatusCode, request::Parts};
 
-use crate::server::{UserMgmt, UsersRepo};
+use crate::server::{UserAccountsRepo, UserMgmt};
 
 #[cfg(feature = "ssr")]
 #[derive(Clone, Debug)]
@@ -21,7 +21,9 @@ pub struct ServerState {
 impl ServerState {
     pub fn new(db_pool: Arc<PgPool>) -> Self {
         //
-        let user_mgmt = Arc::new(UserMgmt::new(Arc::new(UsersRepo::new(db_pool.clone()))));
+        let user_mgmt = Arc::new(UserMgmt::new(Arc::new(UserAccountsRepo::new(
+            db_pool.clone(),
+        ))));
         Self { user_mgmt }
     }
 }
