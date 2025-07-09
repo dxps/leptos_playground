@@ -18,8 +18,8 @@ crate-type = [ "cdylib", "rlib" ]
 [dependencies]
 ##############
 
-console_error_panic_hook = "0.1.7"
-futures = "0.3.31"
+console_error_panic_hook = "=0.1.7"
+futures = "=0.3.31"
 leptos = { version="=0.8.2", features = ["csr", "nightly"] }
 leptos_axum = { version="=0.8.2", optional = true }
 leptos_meta = { version="=0.8.2" }
@@ -92,31 +92,45 @@ skip_feature_sets = [ ["csr", "ssr"], ["csr", "hydrate"], ["ssr", "hydrate"], []
 [package.metadata.leptos]
 #########################
 
-# The name used by wasm-bindgen/cargo-leptos for the JS/WASM bundle. Defaults to the crate name
+# The name used by wasm-bindgen/cargo-leptos for the JS/WASM bundle. Defaults to the crate name.
 output-name = "user_dir_lap"
-# The site root folder is where cargo-leptos generate all output. WARNING: all content of this folder will be erased on a rebuild. Use it in your server setup.
+# The site root folder is where cargo-leptos generate all output. 
+# WARNING: all content of this folder will be erased on a rebuild. Use it in your server setup.
 site-root = "target/site"
-# The site-root relative folder where all compiled output (JS, WASM and CSS) is written
+# The site-root relative folder where all compiled output (JS, WASM and CSS) is written to.
 # Defaults to pkg
 site-pkg-dir = "pkg"
-# [Optional] The source CSS file. If it ends with .sass or .scss then it will be compiled by dart-sass into CSS. 
+
+# Optional. The source CSS file. If it ends with .sass or .scss then it will be compiled by dart-sass into CSS.
 # The CSS is optimized by Lightning CSS before being written to <site-root>/<site-pkg>/app.css
-# style-file = "./style.css"
+style-file = "src/ui/styles/input.css"
+
+# Optional. It activates the Tailwind CSS build.
+tailwind-input-file = "src/ui/styles/input.css"
+
 # [Optional] Files in the asset-dir will be copied to the site-root directory
 assets-dir = "assets"
+
 # The IP and port (ex: 127.0.0.1:9000) where the server serves the content. Use it in your server setup.
 site-addr = "127.0.0.1:9000"
+
 # The port to use for automatic reload monitoring
 reload-port = 9001
+
 # [Optional] Command to use when running end2end tests. It will run in the end2end dir.
 end2end-cmd = "cargo make test-ui"
 end2end-dir = "e2e"
+
 #  The browserlist query used for optimizing the CSS.
 browserquery = "defaults"
-# Set by cargo-leptos watch when building with that tool. Controls whether autoreload JS will be included in the head
+
+# Set by cargo-leptos watch when building with that tool. 
+# Controls whether autoreload JS will be included in the head.
 watch = false
+
 # The environment Leptos will run in, usually either "DEV" or "PROD"
 env = "DEV"
+
 # The features to use when compiling the bin target
 #
 # Optional. Can be over-ridden with the command line parameter --bin-features
@@ -136,7 +150,3 @@ lib-features = [ "csr" ]
 #
 # Optional. Defaults to false.
 lib-default-features = false
-
-# Optional. It activates the Tailwind CSS build.
-tailwind-input-file = "src/ui/styles/input.css"
-style-file = "src/ui/styles/input.css"
