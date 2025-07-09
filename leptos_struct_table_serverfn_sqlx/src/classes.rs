@@ -33,12 +33,12 @@ impl TableClassesProvider for ClassesPreset {
             if selected {
                 "bg-sky-300 text-gray-700"
             } else {
-                "bg-white hover:bg-gray-100"
+                "bg-white hover:bg-blue-100"
             }
         } else if selected {
             "bg-sky-300 text-gray-700"
         } else {
-            "bg-gray-50 hover:bg-gray-100"
+            "bg-gray-100 hover:bg-blue-100"
         };
 
         format!("{} {} {}", "border-none", bg_color, template_classes)
