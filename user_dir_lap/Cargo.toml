@@ -135,3 +135,6 @@ lib-features = [ "csr" ]
 #
 # Optional. Defaults to false.
 lib-default-features = false
+
+# Optional. It activates the Tailwind CSS build.
+tailwind-input-file = "src/ui/styles/input.css"
