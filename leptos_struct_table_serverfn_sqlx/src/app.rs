@@ -38,12 +38,12 @@ fn HomePage() -> impl IntoView {
     let name = rows.name;
 
     view! {
-        <div class="flex flex-col h-[100vh] bg-white">
-            <div class="border-b bg-slate-100 px-5 py-2">
+        <div class="flex flex-col h-[100vh] bg-slate-200 p-12">
+            <div class="bg-slate-100 px-5 py-2 rounded-t-xl border-t-[1px] border-l-[1px] border-r-[1px] border-slate-300">
                 <label class="relative block">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                         <svg
-                            class="h-5 w-5 fill-black"
+                            class="h-5 w-5 fill-gray-500"
                             xmlns="http://www.w3.org/2000/svg"
                             x="0px"
                             y="0px"
@@ -63,11 +63,12 @@ fn HomePage() -> impl IntoView {
                     />
                 </label>
             </div>
-            <div node_ref=scroll_container class="overflow-auto grow min-h-0">
-                <table class="table-fixed text-sm text-left text-gray-500 dark:text-gray-400 w-full">
+            <div node_ref=scroll_container class="overflow-auto grow min-h-0 border-l-[1px] border-r-[1px] border-slate-300">
+                <table class="table-fixed text-left text-gray-500 w-full">
                     <TableContent rows scroll_container />
                 </table>
             </div>
+            <div class="min-h-4 w-full rounded-b-xl bg-white border-l-[1px] border-r-[1px] border-b-[1px] border-slate-300"></div>
         </div>
     }
 }

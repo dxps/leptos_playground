@@ -19,7 +19,7 @@ impl TableClassesProvider for ClassesPreset {
         };
 
         format!(
-            "bg-gray-200 cursor-pointer px-5 py-2 sticky top-0 whitespace-nowrap {} {}",
+            "bg-gray-200 cursor-pointer px-5 py-[0.2rem] sticky top-0 whitespace-nowrap {} {}",
             sort_class, template_classes
         )
     }
@@ -45,7 +45,7 @@ impl TableClassesProvider for ClassesPreset {
     }
 
     fn loading_cell(&self, _row_index: usize, _col_index: usize, prop_class: &str) -> String {
-        format!("{} {}", "px-5 py-2", prop_class)
+        format!("{} {}", "px-5 py-[0.2rem]", prop_class)
     }
 
     fn loading_cell_inner(&self, row_index: usize, _col_index: usize, prop_class: &str) -> String {
@@ -64,7 +64,7 @@ impl TableClassesProvider for ClassesPreset {
     fn cell(&self, template_classes: &str) -> String {
         format!(
             "{} {}",
-            "px-5 py-2 whitespace-nowrap overflow-hidden text-ellipsis", template_classes
+            "px-5 py-[0.2rem] whitespace-nowrap overflow-hidden text-ellipsis", template_classes
         )
     }
 }

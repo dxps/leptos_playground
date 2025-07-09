@@ -3,7 +3,7 @@
 		"leptos_macro": [
 			// optional:
 			// "component",
-			"server"
+			"ssr"
 		]
 	},
 	// For code that is cfg-gated for 'csr' or 'ssr' feature.
