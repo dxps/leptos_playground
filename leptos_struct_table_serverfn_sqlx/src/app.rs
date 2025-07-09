@@ -13,8 +13,8 @@ pub fn App() -> impl IntoView {
     let (is_routing, set_is_routing) = signal(false);
 
     view! {
-        <Stylesheet id="leptos" href="/pkg/serverfn-sqlx.css" />
-        <Title text="Welcome to Leptos Struct Table" />
+        <Stylesheet id="leptos" href="/pkg/leptos_struct_table_serverfn_sqlx.css" />
+        <Title text="Leptos Struct Table w/ Pagination, Search, ServerFns and SQLx" />
 
         <Router set_is_routing>
             <div class="routing-progress">
