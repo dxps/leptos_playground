@@ -12,3 +12,6 @@ pub use navbar::*;
 
 mod navusermenu;
 pub use navusermenu::*;
+
+mod tw_table;
+pub use tw_table::*;

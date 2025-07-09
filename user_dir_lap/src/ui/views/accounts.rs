@@ -1,10 +1,10 @@
+use crate::domain::model::Id;
 use leptos::prelude::*;
 use leptos_struct_table::*;
-
-use crate::domain::model::Id;
+use std::collections::VecDeque;
 
 #[derive(TableRow, Clone)]
-#[table(impl_vec_data_provider)]
+#[table(sortable, classes_provider = "TailwindClassesPreset")]
 struct UserAccount {
     pub id: Id,
     pub name: String,
@@ -15,59 +15,15 @@ struct UserAccount {
 #[component]
 pub fn UserAccounts() -> impl IntoView {
     //
+    let rows = UserAccountsDataProvider::default();
     let pagination_controller = PaginationController::default();
-
-    let rows = vec![
-        UserAccount {
-            id: Id::new_from("1".to_string()),
-            email: "someone@email.com".into(),
-            name: "John Doe".into(),
-            username: "johndoe".into(),
-        },
-        UserAccount {
-            id: Id::new_from("2".to_string()),
-            email: "someother@email.com".into(),
-            name: "Jane Doe".into(),
-            username: "janedoe".into(),
-        },
-        UserAccount {
-            id: Id::new_from("3".to_string()),
-            email: "someother@email.com".into(),
-            name: "Jane Doe".into(),
-            username: "janedoe".into(),
-        },
-        UserAccount {
-            id: Id::new_from("4".to_string()),
-            email: "someother@email.com".into(),
-            name: "Jane Doe".into(),
-            username: "janedoe".into(),
-        },
-        UserAccount {
-            id: Id::new_from("5".to_string()),
-            email: "someother@email.com".into(),
-            name: "Jane Doe".into(),
-            username: "janedoe".into(),
-        },
-        UserAccount {
-            id: Id::new_from("6".to_string()),
-            email: "someother@email.com".into(),
-            name: "Jane Doe".into(),
-            username: "janedoe".into(),
-        },
-        UserAccount {
-            id: Id::new_from("7".to_string()),
-            email: "someother@email.com".into(),
-            name: "Jane Doe".into(),
-            username: "janedoe".into(),
-        },
-    ];
 
     view! {
         <div>
             <h2>"User Accounts"</h2>
         </div>
-        <div class="shadow-lg rounded-lg p-4">
-            <table class="text-left table-auto min-w-full">
+        <div class="shadow-lg rounded-lg overflow-clip m-10 float-left">
+            <table class="text-sm text-left text-gray-500 mb-[-1px]">
                 <TableContent
                     rows
                     scroll_container="html"
@@ -79,7 +35,6 @@ pub fn UserAccounts() -> impl IntoView {
                 />
             </table>
         </div>
-
         <Paginator pagination_controller />
     }
 }
@@ -104,7 +59,7 @@ pub fn Paginator(pagination_controller: PaginationController) -> impl IntoView {
     };
 
     view! {
-        <nav aria-label="Page navigation example" class="m-10 flex justify-end">
+        <nav aria-label="Page navigation" class="m-10 flex justify-end">
             <ul class="inline-flex -space-x-px text-sm">
                 <li>
                     <a
@@ -193,9 +148,102 @@ pub fn PageLink(page: usize, pagination_controller: PaginationController) -> imp
                     pagination_controller.current_page.set(page);
                 }
             >
-
                 {page + 1}
             </a>
         </li>
+    }
+}
+
+/////////////////////////////////////////////////////////////////////
+// Data Provider
+/////////////////////////////////////////////////////////////////////
+
+pub struct UserAccountsDataProvider {
+    sorting: VecDeque<(usize, ColumnSort)>,
+}
+
+impl Default for UserAccountsDataProvider {
+    fn default() -> Self {
+        Self {
+            sorting: VecDeque::new(),
+        }
+    }
+}
+
+impl UserAccountsDataProvider {
+    fn url_sort_param_for_column(&self, column: usize) -> &'static str {
+        match column {
+            0 => "id",
+            1 => "name",
+            2 => "username",
+            3 => "email",
+            _ => "",
+        }
+    }
+}
+
+impl PaginatedTableDataProvider<UserAccount> for UserAccountsDataProvider {
+    const PAGE_ROW_COUNT: usize = 50;
+
+    async fn get_page(&self, page_index: usize) -> Result<Vec<UserAccount>, String> {
+        // Just for testing.
+        let data: Vec<UserAccount> = vec![
+            UserAccount {
+                id: Id::new_from("1".to_string()),
+                email: "someone@email.com".into(),
+                name: "John Doe".into(),
+                username: "johndoe".into(),
+            },
+            UserAccount {
+                id: Id::new_from("2".to_string()),
+                email: "someother@email.com".into(),
+                name: "Jane Doe".into(),
+                username: "janedoe".into(),
+            },
+            UserAccount {
+                id: Id::new_from("3".to_string()),
+                email: "someother@email.com".into(),
+                name: "Jane Doe".into(),
+                username: "janedoe".into(),
+            },
+            UserAccount {
+                id: Id::new_from("4".to_string()),
+                email: "someother@email.com".into(),
+                name: "Jane Doe".into(),
+                username: "janedoe".into(),
+            },
+            UserAccount {
+                id: Id::new_from("5".to_string()),
+                email: "someother@email.com".into(),
+                name: "Jane Doe".into(),
+                username: "janedoe".into(),
+            },
+            UserAccount {
+                id: Id::new_from("6".to_string()),
+                email: "someother@email.com".into(),
+                name: "Jane Doe".into(),
+                username: "janedoe".into(),
+            },
+            UserAccount {
+                id: Id::new_from("7".to_string()),
+                email: "someother@email.com".into(),
+                name: "Jane Doe".into(),
+                username: "janedoe".into(),
+            },
+        ];
+        leptos::logging::log!("[PaginatedTableDataProvider] get_page: {}", page_index);
+        if page_index == 0 {
+            Ok(data)
+        } else {
+            Ok(Vec::new())
+        }
+    }
+
+    async fn row_count(&self) -> Option<usize> {
+        Some(7)
+    }
+
+    fn set_sorting(&mut self, sorting: &VecDeque<(usize, ColumnSort)>) {
+        self.sorting = sorting.clone();
     }
 }
