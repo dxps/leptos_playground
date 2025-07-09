@@ -8,7 +8,8 @@
 	},
 	// For code that is cfg-gated for 'csr' or 'ssr' feature.
 	"rust-analyzer.cargo.features": ["csr", "ssr"],
-	// Settings relevant for TailwindCSS.
+
+	// Settings related with Tailwind CSS.
 	"emmet.includeLanguages": {
 		"rust": "html",
 		"*.rs": "html"

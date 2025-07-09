@@ -39,7 +39,7 @@ pub async fn get_current_user() -> Result<Option<UserAccount>, ServerFnError> {
     //
     let sess: Session = leptos_axum::extract().await?;
     let curr_user_account = sess.auth_session.current_user.clone();
-    log::debug!(
+    log::trace!(
         "curr_user_account: {:?} is_authenticated: {}.",
         curr_user_account,
         &sess.auth_session.is_authenticated()

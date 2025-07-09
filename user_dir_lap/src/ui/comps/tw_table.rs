@@ -15,11 +15,11 @@ impl TableClassesProvider for TailwindClassesPreset {
     fn thead_cell(&self, sort: ColumnSort, template_classes: &str) -> String {
         let sort_class = match sort {
             ColumnSort::None => "",
-            _ => "text-black",
+            _ => "text-orange-500",
         };
 
         format!(
-            "cursor-pointer px-5 py-2 {} {}",
+            "cursor-pointer px-5 py-1 {} {}",
             sort_class, template_classes
         )
     }
@@ -33,19 +33,19 @@ impl TableClassesProvider for TailwindClassesPreset {
             if selected {
                 "bg-sky-300 text-gray-700"
             } else {
-                "bg-white hover:bg-gray-100"
+                "bg-white hover:bg-gray-200"
             }
         } else if selected {
             "bg-sky-300 text-gray-700"
         } else {
-            "bg-gray-50 hover:bg-gray-100"
+            "bg-gray-100 hover:bg-gray-200"
         };
 
-        format!("{} {} {}", "border-gray-100", bg_color, template_classes)
+        format!("{} {} {}", "border-none", bg_color, template_classes)
     }
 
     fn loading_cell(&self, _row_index: usize, _col_index: usize, prop_class: &str) -> String {
-        format!("{} {}", "px-5 py-2", prop_class)
+        format!("{} {}", "px-5 py-1", prop_class)
     }
 
     fn loading_cell_inner(&self, row_index: usize, _col_index: usize, prop_class: &str) -> String {
@@ -62,6 +62,6 @@ impl TableClassesProvider for TailwindClassesPreset {
     }
 
     fn cell(&self, template_classes: &str) -> String {
-        format!("{} {}", "px-5 py-2", template_classes)
+        format!("{} {}", "px-5 py-1", template_classes)
     }
 }

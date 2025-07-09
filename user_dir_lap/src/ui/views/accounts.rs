@@ -170,18 +170,6 @@ impl Default for UserAccountsDataProvider {
     }
 }
 
-impl UserAccountsDataProvider {
-    fn url_sort_param_for_column(&self, column: usize) -> &'static str {
-        match column {
-            0 => "id",
-            1 => "name",
-            2 => "username",
-            3 => "email",
-            _ => "",
-        }
-    }
-}
-
 impl PaginatedTableDataProvider<UserAccount> for UserAccountsDataProvider {
     const PAGE_ROW_COUNT: usize = 50;
 

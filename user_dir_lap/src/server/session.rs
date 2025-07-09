@@ -38,7 +38,7 @@ impl<S: Send + Sync> FromRequestParts<S> for Session {
                 use crate::server::ServerState;
 
                 let server_state = parts.extensions.get::<ServerState>().unwrap();
-                log::debug!("[from_request_parts] server_state: {server_state:?}");
+                log::trace!("[from_request_parts] server_state: {server_state:?}");
                 Session {
                     user_mgmt: server_state.user_mgmt.clone(),
                     auth_session,
