@@ -33,15 +33,18 @@ impl TableClassesProvider for ClassesPreset {
             if selected {
                 "bg-sky-300 text-gray-700"
             } else {
-                "bg-white hover:bg-blue-100"
+                "bg-white"
             }
         } else if selected {
             "bg-sky-300 text-gray-700"
         } else {
-            "bg-gray-100 hover:bg-blue-100"
+            "bg-gray-100"
         };
 
-        format!("{} {} {}", "border-none", bg_color, template_classes)
+        format!(
+            "{} {} {}",
+            "hover:bg-gray-400 hover:text-white", bg_color, template_classes
+        )
     }
 
     fn loading_cell(&self, _row_index: usize, _col_index: usize, prop_class: &str) -> String {
@@ -56,7 +59,7 @@ impl TableClassesProvider for ClassesPreset {
             _ => "w-[calc(60%-2.5rem)]",
         };
         format!(
-            "animate-pulse h-2 bg-gray-200 rounded-full dark:bg-gray-700 inline-block align-middle {} {}",
+            "animate-pulse h-2 bg-gray-200 rounded-full inline-block align-middle {} {}",
             width, prop_class
         )
     }
