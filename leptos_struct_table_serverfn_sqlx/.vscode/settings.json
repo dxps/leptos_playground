@@ -3,11 +3,12 @@
 		"leptos_macro": [
 			// optional:
 			// "component",
-			"ssr"
+			"ssr",
+			"hydrate"
 		]
 	},
 	// For code that is cfg-gated for 'csr' or 'ssr' feature.
-	"rust-analyzer.cargo.features": ["ssr"],
+	"rust-analyzer.cargo.features": ["ssr", "hydrate"],
 
 	// Settings related with Tailwind CSS.
 	"emmet.includeLanguages": {
