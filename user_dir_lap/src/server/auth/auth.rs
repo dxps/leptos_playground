@@ -17,13 +17,14 @@ pub type AuthSessionLayer =
 impl Authentication<UserAccount, Id, PgPool> for UserAccount {
     //
     async fn load_user(user_id: Id, pool: Option<&PgPool>) -> Result<UserAccount, anyhow::Error> {
-        let pool = pool.unwrap();
-        UserAccountsRepo::get_by_id(&user_id, pool).await.map_or_else(
-            || {
-                log::debug!("[load_user] No user account w/ id: {user_id} exist.");
+        //
+        let repo = UserAccountsRepo::from(pool.unwrap());
+        repo.get_by_id(&user_id).await.map_or_else(
+            |e| {
+                log::debug!("[load_user] No user account w/ id: {user_id} exist: {e}");
                 Err(anyhow::anyhow!("Could not load user"))
             },
-            Ok,
+            |account_opt| account_opt.ok_or(anyhow::anyhow!("Could not get loaded user")),
         )
     }
 

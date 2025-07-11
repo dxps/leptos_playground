@@ -17,7 +17,7 @@ pub fn NavUserMenu() -> impl IntoView {
             <div
                 class="text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition duration-200 flex flex-col items-end overflow-visible">
                 <button
-                    class="px-8 py-1 align rounded-lg text-sm outline-none"
+                    class="px-8 py-1 align rounded-lg text-sm outline-none cursor-pointer"
                     on:click=move |_| {
                         state.open_user_menu().set(!state.open_user_menu().get());
                     }>

@@ -18,6 +18,12 @@ impl UserAccountsRepo {
         Self { dbcp }
     }
 
+    pub fn from(pool: &PgPool) -> Self {
+        Self {
+            dbcp: Arc::new(pool.clone()),
+        }
+    }
+
     pub async fn get_by_username(
         &self,
         username: &String,
@@ -46,33 +52,37 @@ impl UserAccountsRepo {
         .map_err(|err| AppError::from((err, usecase)))
     }
 
-    pub async fn get_by_id(id: &Id, pool: &PgPool) -> Option<UserAccount> {
+    pub async fn get_by_id(&self, id: &Id) -> AppResult<Option<UserAccount>> {
         //
-        let mut user_account = sqlx::query_as::<_, UserAccount>(
+        let mut account = sqlx::query_as::<_, UserAccount>(
             "SELECT id, name, email, username, bio, is_anonymous FROM user_accounts WHERE id = $1",
         )
         .bind(id.as_str())
-        .fetch_one(pool)
+        .fetch_one(self.dbcp.as_ref())
         .await
-        .map_err(AppError::from)
-        .ok()?;
+        .map_err(AppError::from)?;
 
+        self.get_permissions(&mut account).await?;
+
+        Ok(Some(account))
+    }
+
+    pub async fn get_permissions(&self, account: &mut UserAccount) -> AppResult<()> {
         let mut permissions =
             sqlx::query("SELECT permission FROM user_permissions WHERE user_id = $1;")
-                .bind(id.as_str())
+                .bind(account.id.as_str())
                 .map(|r: PgRow| r.get("permission"))
-                .fetch_all(pool)
+                .fetch_all(self.dbcp.as_ref())
                 .await
                 .map_err(|err| {
                     log::error!(
-                        "Could not load permissions for user account w/ id: {id}. Error: {err}"
+                        "Could not load permissions for user account w/ id: {}. Error: {err}",
+                        account.id
                     );
                     AppError::from(err)
-                })
-                .ok()?;
-        user_account.permissions.append(&mut permissions);
-
-        Some(user_account)
+                })?;
+        account.permissions.append(&mut permissions);
+        Ok(())
     }
 
     pub async fn save_with_permissions(

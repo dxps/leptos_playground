@@ -19,10 +19,10 @@ pub fn UserAccounts() -> impl IntoView {
     let pagination_controller = PaginationController::default();
 
     view! {
-        <div>
+        <div class="mt-10">
             <h2>"User Accounts"</h2>
         </div>
-        <div class="shadow-lg rounded-lg overflow-clip m-10 float-left min-w-10/12">
+        <div class="shadow-lg rounded-lg overflow-clip m-2 float-left min-w-10/12">
             <table class="text-sm text-left text-gray-500 mb-[-1px] w-full">
                 <TableContent
                     rows

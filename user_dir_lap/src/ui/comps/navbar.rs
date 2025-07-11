@@ -56,13 +56,13 @@ pub fn Navbar() -> impl IntoView {
                     <li>
                         <a href="/" class=NAVBAR_LIST_ITEM>Home</a>
                     </li>
-                    <li class="text-gray-400">
-                        <NavSep/>
-                    </li>
                     <Show
                         when=move || {
                             state.account().get().is_some() && state.account().get().unwrap().is_admin_read()
                         }>
+                        <li class="text-gray-400">
+                            <NavSep/>
+                        </li>
                         <li>
                             <a href="/accounts" class=NAVBAR_LIST_ITEM>Accounts</a>
                         </li>

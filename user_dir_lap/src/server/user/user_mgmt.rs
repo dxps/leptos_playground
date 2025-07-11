@@ -4,7 +4,7 @@ use randoid::randoid;
 
 use crate::{
     app_err_uc::{AppError, AppResult, AppUseCase},
-    domain::model::Id,
+    domain::model::{Id, UserAccount},
     dtos::LoginResult,
     server::UserAccountsRepo,
 };
@@ -29,11 +29,22 @@ impl UserMgmt {
         {
             Ok(user_entry) => {
                 match Self::check_password(&pwd, &user_entry.password, &user_entry.salt) {
-                    true => LoginResult {
-                        is_succcess: true,
-                        account: Some(user_entry.into()),
-                        error: None,
-                    },
+                    true => {
+                        // Get user permissions.
+                        let mut account: UserAccount = user_entry.into();
+                        match self.user_repo.get_permissions(&mut account).await {
+                            Ok(()) => LoginResult {
+                                is_succcess: true,
+                                account: Some(account),
+                                error: None,
+                            },
+                            Err(e) => LoginResult {
+                                is_succcess: false,
+                                account: None,
+                                error: Some(AppError::into(e)),
+                            },
+                        }
+                    }
                     false => AppError::Unauthorized("wrong credentials".into()).into(),
                 }
             }

@@ -1,3 +1,4 @@
+use crate::domain::model::UserAccount;
 use crate::ui::logic::login;
 use crate::ui::state::{UiState, UiStateStoreFields};
 use crate::ui::styles;
@@ -11,12 +12,15 @@ use reactive_stores::Store;
 #[component]
 pub fn Login() -> impl IntoView {
     //
+    let state = expect_context::<Store<UiState>>();
+
     let username_elem: NodeRef<html::Input> = NodeRef::new();
 
     let username = RwSignal::new("".to_string());
     let password = RwSignal::new("".to_string());
     let login_ok = RwSignal::new(false);
     let login_err: RwSignal<Option<String>> = RwSignal::new(None);
+    let account: RwSignal<Option<UserAccount>> = RwSignal::new(None);
 
     let login_handler = move |_| {
         let username = username.get().clone();
@@ -27,6 +31,7 @@ pub fn Login() -> impl IntoView {
                     if login_res.is_succcess {
                         login_err.set(None);
                         log!("Login succeeded.");
+                        account.set(login_res.account);
                         login_ok.set(true);
                     } else {
                         let err = login_res.error.unwrap().to_string();
@@ -60,15 +65,16 @@ pub fn Login() -> impl IntoView {
         None => "".to_string(),
     };
 
-    let state = expect_context::<Store<UiState>>();
     let navigate = leptos_router::hooks::use_navigate();
 
     Effect::new(move |_| {
         if login_ok.get() {
+            state.account().set(account.get());
             state.is_logged_in().set(true);
             log!(
-                "Updated ui state with is_logged_in: {}",
-                state.is_logged_in().get()
+                "Updated ui state with is_logged_in: {} and account: {:?}",
+                state.is_logged_in().get(),
+                state.account().get()
             );
             navigate("/", NavigateOptions::default());
         }
