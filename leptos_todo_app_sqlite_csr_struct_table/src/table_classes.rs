@@ -1,3 +1,4 @@
+use leptos::logging::log;
 use leptos_struct_table::{ColumnSort, TableClassesProvider};
 
 #[derive(Clone, Copy)]
@@ -17,7 +18,7 @@ impl TableClassesProvider for ClassesPreset {
             ColumnSort::None => "",
             _ => "text-orange-600",
         };
-
+        log!("[thead_cell] sort_class: {}", sort_class);
         format!(
             "bg-gray-200 cursor-pointer px-5 py-[0.2rem] sticky top-0 whitespace-nowrap {} {}",
             sort_class, template_classes
@@ -28,12 +29,7 @@ impl TableClassesProvider for ClassesPreset {
         "flex items-center after:content-[--sort-icon] after:pl-1 after:opacity-40 before:content-[--sort-priority] before:order-last before:pl-0.5 before:font-light before:opacity-40".to_string()
     }
 
-    fn row(
-        &self,
-        row_index: usize,
-        selected: bool,
-        template_classes: &str,
-    ) -> String {
+    fn row(&self, row_index: usize, selected: bool, template_classes: &str) -> String {
         let bg_color = if row_index % 2 == 0 {
             if selected {
                 "bg-sky-300 text-gray-700"
@@ -52,21 +48,11 @@ impl TableClassesProvider for ClassesPreset {
         )
     }
 
-    fn loading_cell(
-        &self,
-        _row_index: usize,
-        _col_index: usize,
-        prop_class: &str,
-    ) -> String {
+    fn loading_cell(&self, _row_index: usize, _col_index: usize, prop_class: &str) -> String {
         format!("{} {}", "px-5 py-[0.2rem]", prop_class)
     }
 
-    fn loading_cell_inner(
-        &self,
-        row_index: usize,
-        _col_index: usize,
-        prop_class: &str,
-    ) -> String {
+    fn loading_cell_inner(&self, row_index: usize, _col_index: usize, prop_class: &str) -> String {
         let width = match row_index % 4 {
             0 => "w-[calc(85%-2.5rem)]",
             1 => "w-[calc(90%-2.5rem)]",
@@ -82,8 +68,7 @@ impl TableClassesProvider for ClassesPreset {
     fn cell(&self, template_classes: &str) -> String {
         format!(
             "{} {}",
-            "px-5 py-[0.2rem] whitespace-nowrap overflow-hidden text-ellipsis",
-            template_classes
+            "px-5 py-[0.2rem] whitespace-nowrap overflow-hidden text-ellipsis", template_classes
         )
     }
 }
