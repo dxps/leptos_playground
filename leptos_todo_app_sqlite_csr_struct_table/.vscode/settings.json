@@ -1,0 +1,30 @@
+{
+	"rust-analyzer.procMacro.ignored": {
+		"leptos_macro": [
+			// optional:
+			// "component",
+			"ssr"
+		]
+	},
+	// For code that is cfg-gated for 'csr' or 'ssr' feature.
+	"rust-analyzer.cargo.features": ["csr", "ssr"],
+
+	// Settings related with Tailwind CSS.
+	"emmet.includeLanguages": {
+		"rust": "html",
+		"*.rs": "html"
+	},
+	"tailwindCSS.includeLanguages": {
+		"rust": "html",
+		"*.rs": "html"
+	},
+	"files.associations": {
+		"*.rs": "rust"
+	},
+	"editor.quickSuggestions": {
+		"other": "on",
+		"comments": "on",
+		"strings": true
+	},
+	"css.validate": false
+}

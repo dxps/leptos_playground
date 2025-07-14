@@ -43,8 +43,7 @@ pub async fn get_todos() -> Result<Vec<Todo>, ServerFnError> {
     let mut conn = db().await?;
 
     let mut todos = Vec::new();
-    let mut rows =
-        sqlx::query_as::<_, Todo>("SELECT * FROM todos").fetch(&mut conn);
+    let mut rows = sqlx::query_as::<_, Todo>("SELECT * FROM todos").fetch(&mut conn);
     while let Some(row) = rows.try_next().await? {
         todos.push(row);
     }
@@ -91,8 +90,8 @@ pub async fn delete_todo(id: u16) -> Result<(), ServerFnError> {
 pub fn TodoApp() -> impl IntoView {
     view! {
         <div class="flex">
-            <a href="/"          class="mx-3 my-2 px-3 py-1 rounded-md bg-slate-200 hover:bg-indigo-200">"Home"</a>
-            <a href="/customers" class="mx-3 my-2 px-3 py-1 rounded-md bg-slate-200 hover:bg-indigo-200">"Customers"</a>
+            <a href="/"          class="mx-3 my-2 px-3 py-1 rounded-md bg-slate-200 hover:bg-orange-300">"Home"</a>
+            <a href="/customers" class="mx-3 my-2 px-3 py-1 rounded-md bg-slate-200 hover:bg-orange-300">"Customers"</a>
         </div>
         <main>
             <Router>
@@ -125,62 +124,67 @@ pub fn Todos() -> impl IntoView {
 
     let existing_todos = move || {
         Suspend::new(async move {
-            todos
-                .await
-                .map(|todos| {
-                    if todos.is_empty() {
-                        Either::Left(view! { <p>"No tasks were found."</p> })
-                    } else {
-                        Either::Right(
-                            todos
-                                .iter()
-                                .map(move |todo| {
-                                    let id = todo.id;
-                                    view! {
-                                        <li>
-                                            {todo.title.clone()}
+            todos.await.map(|todos| {
+                if todos.is_empty() {
+                    Either::Left(view! { <p>"No tasks were found."</p> })
+                } else {
+                    Either::Right(
+                        todos
+                            .iter()
+                            .map(move |todo| {
+                                let id = todo.id;
+                                view! {
+                                    <li>
+                                        <div class="flex flex-row">
+                                            <span class="py-2 mr-2">{todo.title.clone()}</span>
                                             <ActionForm action=delete_todo>
                                                 <input type="hidden" name="id" value=id/>
-                                                <input type="submit" value="X"/>
+                                                <input type="submit" value=" x " 
+                                                    class="text-orange-300 hover:text-orange-700 hover:bg-slate-200 border-0 rounded-full px-1 py-0.5 mt-1" />
                                             </ActionForm>
-                                        </li>
-                                    }
-                                })
-                                .collect::<Vec<_>>(),
-                        )
-                    }
-                })
+                                        </div>
+                                    </li>
+                                }
+                            })
+                            .collect::<Vec<_>>(),
+                    )
+                }
+            })
         })
     };
 
     view! {
-        <MultiActionForm action=add_todo>
-            <label>"Add a Todo" <input type="text" name="title"/></label>
-            <input type="submit" value="Add"/>
-        </MultiActionForm>
-        <div>
-            <Transition fallback=move || view! { <p>"Loading..."</p> }>
-                <ErrorBoundary fallback=|errors| view! { <ErrorTemplate errors/> }>
-                    <ul>
-                        {existing_todos}
-                        {move || {
-                            submissions
-                                .get()
-                                .into_iter()
-                                .filter(|submission| submission.pending().get())
-                                .map(|submission| {
-                                    view! {
-                                        <li class="pending">
-                                            {move || submission.input().get().map(|data| data.title)}
-                                        </li>
-                                    }
-                                })
-                                .collect::<Vec<_>>()
-                        }}
-
-                    </ul>
-                </ErrorBoundary>
-            </Transition>
+        <div class="flex flex-col h-[100vh] bg-slate-200 p-12">
+            <div class="bg-white px-5 py-2 rounded-t-xl border-t-[1px] border-l-[1px] border-r-[1px] border-slate-300">
+                <MultiActionForm action=add_todo>
+                    <label>"Todo " <input type="text" name="title" /></label>
+                    <input type="submit" value="Add" class="ml-2 hover:bg-orange-300" />
+                </MultiActionForm>
+            </div>
+            <div class="grow min-h-0 border-l-[1px] border-r-[1px] border-slate-300 p-3 bg-white">
+                <Transition fallback=move || view! { <p>"Loading..."</p> }>
+                    <ErrorBoundary fallback=|errors| view! { <ErrorTemplate errors/> }>
+                        <ul>
+                            {existing_todos}
+                            {move || {
+                                submissions
+                                    .get()
+                                    .into_iter()
+                                    .filter(|submission| submission.pending().get())
+                                    .map(|submission| {
+                                        view! {
+                                            <li class="pending">
+                                                {move || submission.input().get().map(|data| data.title)}
+                                            </li>
+                                        }
+                                    })
+                                    .collect::<Vec<_>>()
+                            }}
+                        </ul>
+                    </ErrorBoundary>
+                </Transition>
+            </div>
+            <div class="min-h-4 w-full rounded-b-xl bg-white border-l-[1px] border-r-[1px] border-b-[1px] border-slate-300 mb-12"></div>
         </div>
     }
 }

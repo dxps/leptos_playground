@@ -3,3 +3,30 @@
 .pending {
 	color: purple;
 }
+
+@layer base {
+	/* //////////////////////////// */
+	/* Defaults for input elements. */
+	/* //////////////////////////// */
+
+	input {
+		@apply border-[1.4px] border-slate-300 text-base rounded-lg py-1 px-3;
+	}
+	input:focus {
+		@apply border-green-400 outline-none;
+	}
+	input:read-only {
+		@apply border-slate-100 outline-none;
+	}
+	input[readonly]:focus {
+		@apply border-slate-300 outline-none;
+	}
+	/* Hide the arrows on input of type number. */
+	input[type='number']::-webkit-inner-spin-button,
+	input[type='number']::-webkit-outer-spin-button,
+	input[type='number'] {
+		-webkit-appearance: none;
+		/* margin: 0; */
+		-moz-appearance: textfield !important;
+	}
+}

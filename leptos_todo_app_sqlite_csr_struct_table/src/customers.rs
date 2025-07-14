@@ -6,9 +6,7 @@ use leptos_struct_table::*;
 pub fn CustomersView() -> impl IntoView {
     //
     let scroll_container = NodeRef::new();
-
     let rows = CustomerTableDataProvider::default();
-
     let name = rows.name;
 
     view! {
@@ -29,7 +27,7 @@ pub fn CustomersView() -> impl IntoView {
                         </svg>
                     </span>
                     <input
-                        class="w-full bg-white placeholder:font-italitc border border-slate-300 rounded-full py-1 pl-10 pr-4 focus:outline-none"
+                        class="w-full bg-white placeholder:font-italic border border-slate-300 rounded-full py-1 pl-10 pr-4 focus:outline-none"
                         placeholder="Search by name or company"
                         type="text"
                         value=name
