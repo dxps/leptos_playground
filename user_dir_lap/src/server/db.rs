@@ -2,6 +2,8 @@ use crate::app_err_uc::{AppError, AppUseCase};
 use leptos::server_fn::ServerFnError;
 use sqlx::{PgPool, postgres::PgPoolOptions};
 
+static DB_POOL: std::sync::OnceLock<PgPool> = std::sync::OnceLock::new();
+
 pub async fn db_pool_init() -> Result<PgPool, ServerFnError> {
     //
     let db_url = std::env::var("DATABASE_URL").map_err(|err| {
@@ -17,7 +19,12 @@ pub async fn db_pool_init() -> Result<PgPool, ServerFnError> {
         .await
         .map_err(|_| AppError::Err("Failed to connect to database".into()))?;
 
+    DB_POOL.set(pool.clone()).unwrap();
     Ok(pool)
+}
+
+pub fn get_db_pool() -> &'static PgPool {
+    DB_POOL.get().expect("db pool is not initialized")
 }
 
 // ////////////////////////////////////////////////////////
@@ -28,7 +35,6 @@ impl From<sqlx::Error> for AppError {
     //
     fn from(err: sqlx::Error) -> Self {
         //
-
         let mut app_err = AppError::Ignorable;
         log::debug!("from(sqlx:Error): err={:?}", err);
         if err.as_database_error().is_some() {

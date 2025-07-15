@@ -1,4 +1,4 @@
-use crate::ui::views::{Home, Login, Logout, UserAccounts};
+use crate::ui::views::{Home, Login, Logout, UserAccountsView};
 use leptos::prelude::*;
 use leptos_router::{
     components::{Route, Routes},
@@ -11,7 +11,7 @@ pub fn routes() -> impl IntoView {
             <Route path=path!("/") view=Home/>
             <Route path=path!("/login") view=Login/>
             <Route path=path!("/logout") view=Logout/>
-            <Route path=path!("/accounts") view=UserAccounts/>
+            <Route path=path!("/accounts") view=UserAccountsView/>
         </Routes>
     }
 }

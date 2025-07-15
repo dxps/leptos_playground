@@ -1,6 +1,5 @@
-use serde::{Deserialize, Serialize};
-
 use crate::domain::model::Id;
+use serde::{Deserialize, Serialize};
 
 /// User account contains most of the details of a user (except password related ones).
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

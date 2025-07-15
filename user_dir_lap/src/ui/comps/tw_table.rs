@@ -15,7 +15,7 @@ impl TableClassesProvider for TailwindClassesPreset {
     fn thead_cell(&self, sort: ColumnSort, template_classes: &str) -> String {
         let sort_class = match sort {
             ColumnSort::None => "",
-            _ => "text-orange-600",
+            _ => "text-blue-500",
         };
 
         format!(
@@ -25,7 +25,10 @@ impl TableClassesProvider for TailwindClassesPreset {
     }
 
     fn thead_cell_inner(&self) -> String {
-        "flex items-center after:content-[--sort-icon] after:pl-1 after:opacity-40 before:content-[--sort-priority] before:order-last before:pl-0.5 before:font-light before:opacity-40".to_string()
+        "flex text-blue-500 items-center after:content-[--sort-icon] after:pl-1 after:opacity-40 
+         before:content-[--sort-priority] before:order-last before:pl-0.5 before:font-light 
+         before:opacity-40"
+            .to_string()
     }
 
     fn row(&self, row_index: usize, selected: bool, template_classes: &str) -> String {
