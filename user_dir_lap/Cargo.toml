@@ -20,11 +20,13 @@ crate-type = [ "cdylib", "rlib" ]
 
 console_error_panic_hook = "=0.1.7"
 futures = "=0.3.31"
-leptos = { version="=0.8.2", features = ["csr", "nightly"] }
-leptos_axum = { version="=0.8.2", optional = true }
-leptos_meta = { version="=0.8.2" }
-leptos_router = { version="=0.8.2" }
-leptos_integration_utils = { version="=0.8.2", optional = true }
+
+leptos = { version="=0.8.3", features = ["csr", "nightly"] }
+leptos_axum = { version="=0.8.3", optional = true }
+leptos_meta = { version="=0.8.3" }
+leptos_router = { version="=0.8.3" }
+leptos_integration_utils = { version="=0.8.3", optional = true }
+
 serde = { version = "=1.0.219", features = ["derive"] }
 axum = { version = "=0.8.4", features = ["macros"], optional = true }
 tower = { version = "=0.5.2", features = ["util"], optional = true }
@@ -51,7 +53,8 @@ wasm-bindgen = "=0.2.100"
 dotenvy = { version = "=0.15.7", optional = true }
 randoid = { version = "=0.3.0", optional = true }
 md5 = { version = "=0.8.0", optional = true }
-reactive_stores = { version = "=0.2.2" }
+
+reactive_stores = { version = "=0.2.3" }
 leptos-struct-table = "0.15.0"
 
 ##########
